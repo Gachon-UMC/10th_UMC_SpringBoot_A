@@ -14,38 +14,43 @@ public class MissionResDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class HomeDTO {
-        private String userName;
-        private List<MissionDTO> ongoingMissions;
+    public static class MissionCountDTO {
+        private Integer count;
     }
 
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class MissionListDTO {
-        private List<MissionDTO> missions;
+    public static class MissionCompleteResultDTO {
+        private Long missionId;
+        private Boolean isCompleted;
+        private LocalDateTime updatedAt;
     }
 
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class MissionDTO {
+    public static class MissionPreviewListDTO {
+        private List<MissionPreviewDTO> missionList;
+        private Integer listSize;
+        private Integer totalPage;
+        private Long totalElements;
+        private Boolean isFirst;
+        private Boolean isLast;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MissionPreviewDTO {
         private Long missionId;
         private String storeName;
         private String missionSpec;
         private Integer reward;
         private LocalDateTime deadline;
-    }
-
-    @Builder
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class MissionUpdateResultDTO {
-        private Long userMissionId;
-        private String status;
-        private LocalDateTime updatedAt;
+        private LocalDateTime createdAt;
     }
 }
