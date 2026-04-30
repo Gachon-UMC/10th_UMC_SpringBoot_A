@@ -1,78 +1,66 @@
 package com.example.umc10th.domain.user.dto;
 
-import java.util.List;
+
+import com.example.umc10th.domain.user.enums.Gender;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class UserResDTO {
 
-    public record MyPage(
-            String nickname,
+    @Builder
+    public record SignupResultDTO(
+            Long userId,
+            LocalDateTime createdAt
+    ) {
+    }
+
+    @Builder
+    public record MyInfoDTO(
+            Long userId,
+            String name,
             String profileUrl,
             String email,
             String phoneNumber,
+            Gender gender,
+            LocalDate birth,
+            String address,
             Integer point
     ) {
     }
 
-    public record Profile(
-            String nickname,
-            String profileUrl,
-            String email,
-            String phoneNumber
+    @Builder
+    public record UpdateMyInfoResultDTO(
+            Long userId,
+            String nickName,
+            String phoneNumber,
+            LocalDateTime updatedAt
     ) {
     }
 
-    public record Point(
+    // static class 일때 예시!!
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DeleteUserResultDTO {
+        private Long userId;
+        private LocalDateTime deletedAt;
+    }
+
+    @Builder
+    public record PointDTO(
             Integer point
     ) {
     }
 
-    public record ReviewPreview(
-            Long reviewId,
-            Long storeId,
-            String storeName,
-            Double star,
-            String content
-    ) {
-    }
-
-    public record ReviewList(
-            Integer page,
-            Integer size,
-            Boolean hasNext,
-            List<ReviewPreview> reviews
-    ) {
-    }
-
-    public record InquiryPreview(
-            Long inquiryId,
-            String content,
-            String status
-    ) {
-    }
-
-    public record InquiryList(
-            List<InquiryPreview> inquiries
-    ) {
-    }
-
-    public record InquiryCreated(
-            Long inquiryId
-    ) {
-    }
-
-    public record NotificationSettings(
-            Boolean reviewReplyNotificationEnabled
-    ) {
-    }
-
-    public record PhoneVerificationResult(
-            String phone,
-            String status
-    ) {
-    }
-
-    public record UserDeleted(
-            Long userId
+    @Builder
+    public record NotificationSettingDTO(
+            Boolean reviewReplyNotification
     ) {
     }
 }
