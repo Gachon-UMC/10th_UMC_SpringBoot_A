@@ -13,7 +13,7 @@ public class UserReqDTO {
     // 회원 가입
     @Getter
     @NoArgsConstructor
-    public static class signupDTO {
+    public static class SignupDTO {
         private String name;
         private Gender gender;
         private LocalDate birth;

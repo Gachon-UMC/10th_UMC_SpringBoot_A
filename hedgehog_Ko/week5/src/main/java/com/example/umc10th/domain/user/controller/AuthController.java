@@ -22,7 +22,7 @@ public class AuthController {
 
     // 회원 가입
     @PostMapping("/signup")
-    public ApiResponse<UserResDTO.SignupResultDTO> signup(@RequestBody UserReqDTO.signupDTO user) {
+    public ApiResponse<UserResDTO.SignupResultDTO> signup(@RequestBody UserReqDTO.SignupDTO user) {
         UserResDTO.SignupResultDTO response = UserResDTO.SignupResultDTO.builder()
                 .userId(1L)
                 .createdAt(LocalDateTime.now())
