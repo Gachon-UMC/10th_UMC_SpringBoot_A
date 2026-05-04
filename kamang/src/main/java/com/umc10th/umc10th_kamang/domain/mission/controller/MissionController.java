@@ -2,6 +2,7 @@ package com.umc10th.umc10th_kamang.domain.mission.controller;
 
 import com.umc10th.umc10th_kamang.domain.mission.dto.MissionRequest;
 import com.umc10th.umc10th_kamang.domain.mission.dto.MissionResponse;
+import com.umc10th.umc10th_kamang.domain.mission.service.MissionService;
 import com.umc10th.umc10th_kamang.global.apiPayload.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class MissionController {
+
+    private final MissionService missionService;
 
     /**
      * 홈 화면 조회 (지역 기반 미션 목록)
@@ -30,15 +33,15 @@ public class MissionController {
 
     /**
      * 사용자 미션 목록 조회
-     * GET /api/user-missions
+     * GET /api/users/me/missions
      */
-    @GetMapping("/api/user-missions")
+    @GetMapping("/api/users/me/missions")
     public ApiResponse<MissionResponse.MissionListDTO> getUserMissions(
+            @RequestParam Long userId,
             @RequestParam String status,
             @RequestParam(required = false, defaultValue = "0") Integer page,
             @RequestParam(required = false, defaultValue = "10") Integer size) {
-        // TODO: 다음 주차에서 Service 연결 예정
-        return ApiResponse.onSuccess(null);
+        return ApiResponse.onSuccess(missionService.getUserMissions(userId, status, page, size));
     }
 
     /**
