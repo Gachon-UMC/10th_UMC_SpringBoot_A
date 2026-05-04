@@ -12,6 +12,17 @@ import java.util.List;
 
 public interface UserMissionRepository extends JpaRepository<UserMission, Long> {
 
+    @Query("""
+            SELECT COUNT(userMission)
+            FROM UserMission userMission
+            WHERE userMission.user.id = :userId
+              AND userMission.status = :status
+            """)
+    Long countCompletedMissionsByUser(
+            @Param("userId") Long userId,
+            @Param("status") MissionStatus status
+    );
+
     @Query(
             value = """
                     SELECT userMission

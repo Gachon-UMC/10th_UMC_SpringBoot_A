@@ -20,6 +20,12 @@ public class MissionResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class HomeDTO {
+        private Long regionId;
+        private String regionName;
+        private Integer totalPoints;
+        private Long completedMissionCount;
+        private Integer missionGoalCount;
+        private Integer goalRewardPoints;
         private List<MissionPreviewDTO> missions;
         private Integer currentPage;
         private Integer totalPages;

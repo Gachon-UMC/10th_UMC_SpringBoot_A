@@ -24,11 +24,11 @@ public class MissionController {
      */
     @GetMapping("/api/home")
     public ApiResponse<MissionResponse.HomeDTO> getHome(
+            @RequestParam Long userId,
             @RequestParam(required = false) Long regionId,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size) {
-        // TODO: 다음 주차에서 Service 연결 예정
-        return ApiResponse.onSuccess(null);
+        return ApiResponse.onSuccess(missionService.getHome(userId, regionId, page, size));
     }
 
     /**
