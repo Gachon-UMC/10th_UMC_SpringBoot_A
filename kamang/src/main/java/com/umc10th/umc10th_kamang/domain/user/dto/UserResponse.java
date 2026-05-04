@@ -47,4 +47,21 @@ public class UserResponse {
         private String content;
         private Boolean isRequired;
     }
+
+    /**
+     * 마이페이지 조회 응답 DTO
+     * GET /api/users/me
+     */
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MyPageDTO {
+        private Long userId;
+        private String nickname;
+        private String email;
+        private String phoneNumber;
+        private Boolean isPhoneVerified;
+        private Integer totalPoints;
+    }
 }
