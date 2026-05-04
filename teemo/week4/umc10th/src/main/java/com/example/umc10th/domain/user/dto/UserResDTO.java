@@ -1,5 +1,6 @@
-package com.example.umc10th.domain.review.dto;
+package com.example.umc10th.domain.user.dto;
 
+import com.example.umc10th.domain.mission.dto.MissionResDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,14 +9,14 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class ReviewResDTO {
+public class UserResDTO {
 
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ReviewResultDTO {
-        private Long reviewId;
+    public static class JoinResultDTO {
+        private Long userId;
         private LocalDateTime createdAt;
     }
 
@@ -23,19 +24,18 @@ public class ReviewResDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ReviewListDTO {
-        private List<ReviewDTO> reviews;
+    public static class TermListDTO {
+        private List<TermDTO> terms;
     }
 
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ReviewDTO {
-        private Long reviewId;
-        private String storeName;
+    public static class TermDTO {
+        private Long termId;
+        private String title;
         private String body;
-        private Float score;
-        private LocalDateTime createdAt;
+        private Boolean optional;
     }
 }
