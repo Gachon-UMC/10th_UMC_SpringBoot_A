@@ -1,4 +1,7 @@
 package com.umc10th.umc10th_kamang.domain.category.repository;
 
-public interface UserFoodPreferenceRepository {
+import com.umc10th.umc10th_kamang.domain.category.entity.UserFoodPreference;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserFoodPreferenceRepository extends JpaRepository<UserFoodPreference, Long> {
 }
