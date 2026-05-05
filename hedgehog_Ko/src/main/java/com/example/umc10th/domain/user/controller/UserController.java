@@ -22,17 +22,9 @@ public class UserController {
     // 내 정보 조회
     @GetMapping("/me")
     public ApiResponse<UserResDTO.MyInfoDTO> getMyInfo() {
-        UserResDTO.MyInfoDTO response = UserResDTO.MyInfoDTO.builder()
-                .userId(1L)
-                .name("홍길동")
-                .profileUrl("https://example.com/profile.png")
-                .email("test@example.com")
-                .phoneNumber("01012345678")
-                .gender(Gender.MALE)
-                .birth(LocalDate.of(2003, 1, 1))
-                .address("서울시")
-                .point(2500)
-                .build();
+        Long userId = 1L;
+
+        UserResDTO.MyInfoDTO response = userService.getMyInfo(userId);
 
         return ApiResponse.onSuccess(UserSuccessCode.GET_MY_INFO_SUCCESS, response);
     }
@@ -44,8 +36,10 @@ public class UserController {
     ) {
         UserResDTO.UpdateMyInfoResultDTO response = UserResDTO.UpdateMyInfoResultDTO.builder()
                 .userId(1L)
-                .nickName(request.nickName())
-                .phoneNumber(request.phone())
+                .nickname(request.nickname())
+                .address(request.address())
+                .detailAddress(request.detailAddress())
+                .profileImageUrl(request.profileImageUrl())
                 .updatedAt(LocalDateTime.now())
                 .build();
 

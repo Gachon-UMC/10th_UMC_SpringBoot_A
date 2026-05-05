@@ -1,6 +1,7 @@
 package com.example.umc10th.domain.user.dto;
 
 import com.example.umc10th.domain.user.enums.Gender;
+import com.example.umc10th.domain.user.enums.SocialType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,16 +16,25 @@ public class UserReqDTO {
     @NoArgsConstructor
     public static class SignupDTO {
         private String name;
+        private String nickname;
         private Gender gender;
         private LocalDate birth;
         private String address;
+        private String detailAddress;
+        private String socialUid;
+        private SocialType socialType;
+        private String email;
+        private String phoneNumber;
+        private String profileImageUrl;
     }
 
     // record 방식
     // 내 정보 수정
     public record UpdateMyInfoDTO(
-            String nickName,
-            String phone
+            String nickname,
+            String address,
+            String detailAddress,
+            String profileImageUrl
     ) {
     }
 

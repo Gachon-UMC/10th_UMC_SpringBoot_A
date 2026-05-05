@@ -6,11 +6,12 @@ import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 //import lombok.AccessLevel; // AccessLevel을 사용하기 위한 어노테이션
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor //(access = AccessLevel.PRIVATE) // 생성자가 private이 되도록 하는 코드이다. 넣는 게 좋다고 한다! 외부에서 new로 직접 만드는 것을 방지!!
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @JsonPropertyOrder({"isSuccess", "code", "message", "result"}) // JSON 형식(직렬화 순서) 지정하는 코드
 public class ApiResponse<T> {
 
