@@ -14,15 +14,11 @@ import com.example.umc10th.domain.mission.exception.code.MissionErrorCode;
 import com.example.umc10th.domain.mission.repository.LocationRepository;
 import com.example.umc10th.domain.mission.repository.MemberMissionRepository;
 import com.example.umc10th.domain.mission.repository.MissionRepository;
-import com.example.umc10th.domain.mission.repository.StoreRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import org.springframework.data.domain.PageRequest;
-
-import org.springframework.data.domain.Page;
 
 @Service
 @RequiredArgsConstructor
@@ -35,24 +31,27 @@ public class MissionService {
     private final LocationRepository locationRepository;
 
     public MissionResponseDTO.MissionListDTO getMemberMissions(Long userId, Boolean isCompleted, Long cursor) {
-        memberRepository.findById(userId)
+        User user = memberRepository.findById(userId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
-        Page<MemberMission> memberMissionPage = memberMissionRepository.findByUserIdWithCursor(
-            userId, isCompleted, cursor, PageRequest.of(0, 10)
+        Slice<MemberMission> memberMissionSlice = memberMissionRepository.findByUserIdWithCursor(
+                user,
+                isCompleted,
+                cursor,
+                PageRequest.of(0, 10)
         );
 
-        return MissionConverter.toMemberMissionListDTO(memberMissionPage);
+        return MissionConverter.toMemberMissionListDTO(memberMissionSlice);
     }
 
     public MissionResponseDTO.MissionStatsDTO getMissionCountByRegion(Long userId, Long regionId) {
-        memberRepository.findById(userId)
+        User user = memberRepository.findById(userId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         Location location = locationRepository.findById(regionId)
             .orElseThrow(() -> new MissionException(MissionErrorCode.REGION_NOT_FOUND));
 
-        Long count = memberMissionRepository.countSuccessfulMissionsByUserIdAndRegionId(userId, regionId);
+        Long count = memberMissionRepository.countSuccessfulMissionsByUserIdAndRegionId(user, location);
 
         return new MissionResponseDTO.MissionStatsDTO(location.getName(), count);
     }

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Slice;
 
 public class MissionConverter {
 
@@ -39,27 +40,20 @@ public class MissionConverter {
             .collect(Collectors.toList());
         return new MissionResponseDTO.MissionListDTO(
             previewDTOs,
-            previewDTOs.size(),
-            1,
-            (long) previewDTOs.size(),
-            true,
-            true
+            null
         );
     }
 
-    public static MissionResponseDTO.MissionListDTO toMemberMissionListDTO(Page<MemberMission> memberMissionPage) {
-        List<MissionResponseDTO.MissionPreviewDTO> previewDTOs = memberMissionPage.getContent().stream()
-            .map(MissionConverter::toMissionPreviewDTO)
-            .collect(Collectors.toList());
-        
-        return new MissionResponseDTO.MissionListDTO(
-            previewDTOs,
-            previewDTOs.size(),
-            memberMissionPage.getTotalPages(),
-            memberMissionPage.getTotalElements(),
-            memberMissionPage.isFirst(),
-            memberMissionPage.isLast()
-        );
+    public static MissionResponseDTO.MissionListDTO toMemberMissionListDTO(Slice<MemberMission> memberMissionSlice) {
+        List<MemberMission> content = memberMissionSlice.getContent();
+
+        List<MissionResponseDTO.MissionPreviewDTO> previewDTOs = content.stream()
+                .map(MissionConverter::toMissionPreviewDTO)
+                .collect(Collectors.toList());
+
+        Long nextCursor = content.isEmpty() ? null : content.get(content.size() - 1).getId();
+
+        return new MissionResponseDTO.MissionListDTO(previewDTOs, nextCursor);
     }
 
     public static MissionResponseDTO.MissionChallengeResultDTO toMissionChallengeResultDTO(MemberMission memberMission) {
