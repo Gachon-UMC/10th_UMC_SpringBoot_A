@@ -5,7 +5,7 @@ import java.util.List;
 
 public class MemberRequestDTO {
 
-    public record JoinDTO(
+    public record CreateDTO(
         String name,
         String gender,
         LocalDate birthday,

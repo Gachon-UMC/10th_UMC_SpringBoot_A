@@ -19,12 +19,17 @@ public class MissionResponseDTO {
     ) {}
 
     public record MissionListDTO(
-        List<MissionPreviewDTO> missions
+        List<MissionPreviewDTO> missions,
+        Integer listSize,
+        Integer totalPage,
+        Long totalElements,
+        Boolean isFirst,
+        Boolean isLast
     ) {}
 
     public record MissionStatsDTO(
         String regionName,
-        Integer successCount
+        Long successCount
     ) {}
 
     public record MissionStatsListDTO(

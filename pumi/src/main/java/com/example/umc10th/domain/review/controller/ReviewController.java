@@ -7,10 +7,7 @@ import com.example.umc10th.domain.review.service.ReviewService;
 import com.example.umc10th.global.apiPayload.Response;
 import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,9 +16,13 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @PostMapping("")
-    public Response<ReviewResponseDTO.ReviewResultDTO> writeReview(@RequestBody ReviewRequestDTO.WriteReviewDTO request) {
+    @PostMapping("/missions/{missionId}")
+    public Response<ReviewResponseDTO.ReviewResultDTO> createReview(
+        @RequestParam Long userId,
+        @PathVariable Long missionId,
+        @RequestBody ReviewRequestDTO.WriteReviewDTO request
+    ) {
         BaseSuccessCode code = ReviewSuccessCode.OK;
-        return Response.onSuccess(code, reviewService.writeReview(request));
+        return Response.onSuccess(code, reviewService.createReview(userId, missionId, request));
     }
 }

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class MemberResponseDTO {
 
-    public record JoinResultDTO(
+    public record CreateResultDTO(
         Long memberId,
         LocalDateTime createdAt
     ) {}
@@ -27,6 +27,16 @@ public class MemberResponseDTO {
     ) {}
 
     public record NotificationListDTO(
-        List<NotificationPreviewDTO> notifications
+        List<NotificationPreviewDTO> notifications,
+        Integer listSize,
+        Integer totalPage,
+        Long totalElements,
+        Boolean isFirst,
+        Boolean isLast
+    ) {}
+
+    public record PointInfoDTO(
+        Long memberId,
+        Integer totalPoints
     ) {}
 }

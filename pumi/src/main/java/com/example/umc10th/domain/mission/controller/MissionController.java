@@ -6,11 +6,7 @@ import com.example.umc10th.domain.mission.service.MissionService;
 import com.example.umc10th.global.apiPayload.Response;
 import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,34 +15,36 @@ public class MissionController {
 
     private final MissionService missionService;
 
-    @GetMapping("/points")
-    public Response<MissionResponseDTO.PointInfoDTO> getPoints() {
+    // 홈 화면, 진행중, 진행 완료 미션 목록 모두 사용 가능.
+    @GetMapping("/me/mission")
+    public Response<MissionResponseDTO.MissionListDTO> getMemberMissions(
+        @RequestParam Long userId,
+        @RequestParam(required = false) Boolean isCompleted,
+        @RequestParam(required = false) Long cursor
+    ) {
         BaseSuccessCode code = MissionSuccessCode.OK;
-        return Response.onSuccess(code, missionService.getPoints());
+        return Response.onSuccess(code, missionService.getMemberMissions(userId, isCompleted, cursor));
     }
 
-    @GetMapping("/missions")
-    public Response<MissionResponseDTO.MissionListDTO> getMissions() {
+    @GetMapping("/missions/count/region/{id}")
+    public Response<MissionResponseDTO.MissionStatsDTO> getMissionCountByRegion(
+        @RequestParam Long userId,
+        @PathVariable Long id
+    ) {
         BaseSuccessCode code = MissionSuccessCode.OK;
-        return Response.onSuccess(code, missionService.getMissions());
+        return Response.onSuccess(code, missionService.getMissionCountByRegion(userId, id));
     }
 
-    @GetMapping("/missions/stats/region")
-    public Response<MissionResponseDTO.MissionStatsListDTO> getMissionStatsByRegion() {
+    @PostMapping("/missions/{id}/challenge")
+    public Response<MissionResponseDTO.MissionChallengeResultDTO> createMissionChallenge(@RequestParam Long userId, @PathVariable Long id) {
         BaseSuccessCode code = MissionSuccessCode.OK;
-        return Response.onSuccess(code, missionService.getMissionStatsByRegion());
+        return Response.onSuccess(code, missionService.createMissionChallenge(userId, id));
     }
 
-    @PostMapping("/missions/{missionId}/challenge")
-    public Response<MissionResponseDTO.MissionChallengeResultDTO> challengeMission(@PathVariable Long missionId) {
+    @PostMapping("/missions/{id}/complete")
+    public Response<String> updateMissionCompletion(@PathVariable Long id) {
         BaseSuccessCode code = MissionSuccessCode.OK;
-        return Response.onSuccess(code, missionService.challengeMission(missionId));
-    }
-
-    @PostMapping("/missions/{missionId}/success")
-    public Response<String> successMission(@PathVariable Long missionId) {
-        BaseSuccessCode code = MissionSuccessCode.OK;
-        missionService.completeMission(missionId);
-        return Response.onSuccess(code, "미션 성공 처리 완료");
+        missionService.updateMissionCompletion(id);
+        return Response.onSuccess(code, "미션 완료 성공");
     }
 }
