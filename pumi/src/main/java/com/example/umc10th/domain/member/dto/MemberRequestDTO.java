@@ -17,4 +17,13 @@ public class MemberRequestDTO {
     public record UpdateDTO(
         String name
     ) {}
+
+    public record NotificationSettingDTO(
+        String type,
+        Boolean isEnable
+    ) {}
+
+    public record UpdateNotificationSettingsDTO(
+        List<NotificationSettingDTO> notification
+    ) {}
 }

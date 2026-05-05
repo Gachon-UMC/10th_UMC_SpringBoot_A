@@ -21,4 +21,11 @@ public class MemberService {
 
     public void deleteMe() {
     }
+
+    public void updateNotificationSettings(MemberRequestDTO.UpdateNotificationSettingsDTO request) {
+    }
+
+    public MemberResponseDTO.NotificationListDTO getNotifications() {
+        return null;
+    }
 }

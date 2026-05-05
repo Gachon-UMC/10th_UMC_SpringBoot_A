@@ -10,11 +10,4 @@ public class ReviewService {
     public ReviewResponseDTO.ReviewResultDTO writeReview(ReviewRequestDTO.WriteReviewDTO request) {
         return null;
     }
-
-    public void updateNotificationSettings(ReviewRequestDTO.UpdateNotificationSettingsDTO request) {
-    }
-
-    public ReviewResponseDTO.NotificationListDTO getNotifications() {
-        return null;
-    }
 }

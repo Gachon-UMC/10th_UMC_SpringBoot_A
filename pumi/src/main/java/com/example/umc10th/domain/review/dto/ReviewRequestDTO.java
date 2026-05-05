@@ -9,13 +9,4 @@ public class ReviewRequestDTO {
         String content,
         List<String> images
     ) {}
-
-    public record NotificationSettingDTO(
-        String type,
-        Boolean isEnable
-    ) {}
-
-    public record UpdateNotificationSettingsDTO(
-        List<NotificationSettingDTO> notification
-    ) {}
 }
