@@ -16,10 +16,8 @@ public enum StoreErrorCode implements BaseErrorCode {
             "가게 요청 값이 올바르지 않습니다."),
     INVALID_STORE_CURSOR(HttpStatus.BAD_REQUEST,
             "STORE400_2",
-            "커서 값이 올바르지 않습니다."),
-    INVALID_STORE_CATEGORY(HttpStatus.BAD_REQUEST,
-            "STORE400_3",
-            "가게 카테고리 값이 올바르지 않습니다.");
+            "커서 값이 올바르지 않습니다.");
+
     private final HttpStatus status;
     private final String code;
     private final String message;

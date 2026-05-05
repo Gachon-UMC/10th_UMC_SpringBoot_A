@@ -1,7 +1,6 @@
 package com.example.umc10th.domain.store.controller;
 
 import com.example.umc10th.domain.store.dto.StoreResDTO;
-import com.example.umc10th.domain.store.enums.StoreCategory;
 import com.example.umc10th.domain.store.exception.code.StoreSuccessCode;
 import com.example.umc10th.domain.store.service.StoreService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
@@ -28,18 +27,20 @@ public class StoreController {
                 StoreResDTO.StorePreviewDTO.builder()
                         .storeId(1L)
                         .storeName("반이학생마라탕")
-                        .category(StoreCategory.CHINESE)
+                        .foodCategoryId(1L)
+                        .foodCategoryName("중식당")
                         .detailAddress("서울시 성북구 안암동5가 102-60")
                         .distance(0.3)
-                        .thumbnailUrl("https://example.com/store1.png")
+                        .thumbnailImageUrl("https://example.com/store1.png")
                         .build(),
                 StoreResDTO.StorePreviewDTO.builder()
                         .storeId(2L)
                         .storeName("김밥천국")
-                        .category(StoreCategory.KOREAN)
+                        .foodCategoryId(1L)
+                        .foodCategoryName("분식")
                         .detailAddress("서울시 성북구 안암동4가 100-123")
                         .distance(0.9)
-                        .thumbnailUrl("https://example.com/store2.png")
+                        .thumbnailImageUrl("https://example.com/store2.png")
                         .build()
         );
 
@@ -62,9 +63,10 @@ public class StoreController {
                 .storeId(storeId)
                 .storeName("반이학생마라탕")
                 .detailAddress("서울시 성북구 안암동4가 100-123")
-                .category(StoreCategory.CHINESE)
+                .foodCategoryId(1L)
+                .foodCategoryName("중식당")
                 .open(true)
-                .thumbnailUrl("https://example.com/store1.png")
+                .thumbnailImageUrl("https://example.com/store1.png")
                 .averageStar(4.5)
                 .reviewCount(2)
                 .photoUrls(List.of(
