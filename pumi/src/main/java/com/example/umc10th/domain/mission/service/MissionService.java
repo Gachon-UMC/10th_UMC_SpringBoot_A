@@ -30,13 +30,19 @@ public class MissionService {
     private final MemberRepository memberRepository;
     private final LocationRepository locationRepository;
 
-    public MissionResponseDTO.MissionListDTO getMemberMissions(Long userId, Boolean isCompleted, Long cursor) {
+    public MissionResponseDTO.MissionListDTO getMemberMissions(Long userId, Boolean isCompleted, Long regionId, Long cursor) {
         User user = memberRepository.findById(userId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+        Location location = (regionId != null) ?
+                locationRepository.findById(regionId)
+                        .orElseThrow(() -> new MissionException(MissionErrorCode.REGION_NOT_FOUND))
+                : null;
 
         Slice<MemberMission> memberMissionSlice = memberMissionRepository.findByUserIdWithCursor(
                 user,
                 isCompleted,
+                location,
                 cursor,
                 PageRequest.of(0, 10)
         );
