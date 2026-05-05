@@ -19,12 +19,13 @@ public class MissionResponseDTO {
     ) {}
 
     public record MissionListDTO(
-        List<MissionPreviewDTO> missions
+        List<MissionPreviewDTO> missions,
+        Long nextCursor
     ) {}
 
     public record MissionStatsDTO(
         String regionName,
-        Integer successCount
+        Long successCount
     ) {}
 
     public record MissionStatsListDTO(

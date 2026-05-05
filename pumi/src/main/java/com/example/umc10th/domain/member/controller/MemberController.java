@@ -7,43 +7,30 @@ import com.example.umc10th.domain.member.service.MemberService;
 import com.example.umc10th.global.apiPayload.Response;
 import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/members")
+@RequestMapping("/api")
 public class MemberController {
 
     private final MemberService memberService;
 
-    @PostMapping("")
-    public Response<MemberResponseDTO.JoinResultDTO> join(@RequestBody MemberRequestDTO.JoinDTO request) {
+    @PostMapping("/auth/users")
+    public Response<MemberResponseDTO.CreateResultDTO> createMember(@RequestBody MemberRequestDTO.CreateDTO request) {
         BaseSuccessCode code = MemberSuccessCode.OK;
-        return Response.onSuccess(code, memberService.join(request));
+        return Response.onSuccess(code, memberService.createMember(request));
     }
 
-    @GetMapping("/me")
-    public Response<MemberResponseDTO.MemberInfoDTO> getMe() {
+    @GetMapping("/users/details")
+    public Response<MemberResponseDTO.MemberInfoDTO> getMember(@RequestParam Long userId) {
         BaseSuccessCode code = MemberSuccessCode.OK;
-        return Response.onSuccess(code, memberService.getMe());
+        return Response.onSuccess(code, memberService.getMember(userId));
     }
 
-    @PatchMapping("/me")
-    public Response<MemberResponseDTO.MemberInfoDTO> updateMe(@RequestBody MemberRequestDTO.UpdateDTO request) {
+    @GetMapping("/users/points")
+    public Response<MemberResponseDTO.PointInfoDTO> getMemberPoints(@RequestParam Long userId) {
         BaseSuccessCode code = MemberSuccessCode.OK;
-        return Response.onSuccess(code, memberService.updateMe(request));
-    }
-
-    @DeleteMapping("/me")
-    public Response<String> deleteMe() {
-        BaseSuccessCode code = MemberSuccessCode.OK;
-        memberService.deleteMe();
-        return Response.onSuccess(code, "회원 탈퇴 성공");
+        return Response.onSuccess(code, memberService.getMemberPoints(userId));
     }
 }

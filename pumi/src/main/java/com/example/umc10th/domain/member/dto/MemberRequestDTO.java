@@ -5,7 +5,7 @@ import java.util.List;
 
 public class MemberRequestDTO {
 
-    public record JoinDTO(
+    public record CreateDTO(
         String name,
         String gender,
         LocalDate birthday,
@@ -16,5 +16,14 @@ public class MemberRequestDTO {
 
     public record UpdateDTO(
         String name
+    ) {}
+
+    public record NotificationSettingDTO(
+        String type,
+        Boolean isEnable
+    ) {}
+
+    public record UpdateNotificationSettingsDTO(
+        List<NotificationSettingDTO> notification
     ) {}
 }

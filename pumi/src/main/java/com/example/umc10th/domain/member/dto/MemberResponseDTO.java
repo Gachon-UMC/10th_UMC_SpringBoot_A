@@ -1,10 +1,11 @@
 package com.example.umc10th.domain.member.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class MemberResponseDTO {
 
-    public record JoinResultDTO(
+    public record CreateResultDTO(
         Long memberId,
         LocalDateTime createdAt
     ) {}
@@ -16,5 +17,26 @@ public class MemberResponseDTO {
         String nickname,
         String gender,
         String address
+    ) {}
+
+    public record NotificationPreviewDTO(
+        Long notificationId,
+        String title,
+        String body,
+        LocalDateTime createdAt
+    ) {}
+
+    public record NotificationListDTO(
+        List<NotificationPreviewDTO> notifications,
+        Integer listSize,
+        Integer totalPage,
+        Long totalElements,
+        Boolean isFirst,
+        Boolean isLast
+    ) {}
+
+    public record PointInfoDTO(
+        Long memberId,
+        Integer totalPoints
     ) {}
 }
