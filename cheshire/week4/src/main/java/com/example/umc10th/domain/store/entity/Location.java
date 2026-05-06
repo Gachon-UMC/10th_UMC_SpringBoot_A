@@ -1,6 +1,6 @@
-package com.example.umc10th.domain.member.entity;
+package com.example.umc10th.domain.store.entity;
 
-import com.example.umc10th.domain.member.enums.TermName;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,13 +12,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name ="term")
-public class Term {
+@Table(name="location")
+public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="name")
-    @Enumerated(EnumType.STRING)
-    private TermName name;
+    @Column(name="name", nullable = false) // 이것도 Address Enum으로 관리하는게 맞을까요?
+    private String name;
 }

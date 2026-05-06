@@ -13,12 +13,6 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
     private final MemberService memberService;
 
-    // 아무것도 받지 않은 경우
-    @GetMapping("/test")
-    public String test(){
-        return "test";
-    }
-
 
     @PostMapping("/signup")
     public ApiResponse<?> signUp(@RequestBody MemberReqDTO.SignUp request){

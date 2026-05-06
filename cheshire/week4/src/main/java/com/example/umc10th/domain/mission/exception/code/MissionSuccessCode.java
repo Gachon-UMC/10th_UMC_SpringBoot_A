@@ -21,6 +21,7 @@ public enum MissionSuccessCode implements BaseSuccessCode {
     HOME_OK(HttpStatus.OK,
             "MISSION200_4",
                     "홈 화면 호출을 성공적으로 처리했습니다."),
+
             ;
     private final HttpStatus status;
     private final String code;

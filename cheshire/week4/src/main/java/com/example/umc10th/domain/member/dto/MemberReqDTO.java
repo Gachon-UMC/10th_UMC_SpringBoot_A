@@ -7,13 +7,15 @@ import java.util.List;
 
 public class MemberReqDTO {
 
-    @Getter
-    public static class SignUp{
-        private String name;
-        private String gender;
-        private LocalDate birthDate;
-        private String address;
-        private List<String> preferredFoods;
-    }
+
+    public record SignUp(
+            String name,
+            String gender,
+            LocalDate birthDate,
+            String address,
+            List<String> preferredFoods
+    ){}
+
+
 
 }
