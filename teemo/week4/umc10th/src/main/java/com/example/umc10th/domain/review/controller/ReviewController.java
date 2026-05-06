@@ -1,23 +1,31 @@
 package com.example.umc10th.domain.review.controller;
 
+import com.example.umc10th.domain.review.converter.ReviewConverter;
 import com.example.umc10th.domain.review.dto.ReviewReqDTO;
 import com.example.umc10th.domain.review.dto.ReviewResDTO;
+import com.example.umc10th.domain.review.entity.Review;
+import com.example.umc10th.domain.review.service.ReviewService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api")
 public class ReviewController {
 
-    @PostMapping("/restaurants/{restaurantId}/reviews")
-    @Operation(summary = "식당 리뷰 작성 API", description = "특정 식당에 리뷰를 작성하는 API입니다.")
+    private final ReviewService reviewService;
+
+    @PostMapping("/stores/{storeId}/reviews")
+    @Operation(summary = "가게 리뷰 작성 API", description = "특정 가게에 리뷰를 작성하는 API입니다.")
     public ApiResponse<ReviewResDTO.ReviewResultDTO> createReview(
-            @PathVariable Long restaurantId,
+            @PathVariable Long storeId,
             @RequestBody @Valid ReviewReqDTO.ReviewCreateDTO request) {
-        return ApiResponse.onSuccess(null);
+        Review review = reviewService.createReview(storeId, request);
+        return ApiResponse.onSuccess(ReviewConverter.toReviewResultDTO(review));
     }
 
     @GetMapping("/users/reviews")
