@@ -8,17 +8,17 @@ import com.example.umc10th.domain.mission.converter.MissionConverter;
 import com.example.umc10th.domain.mission.dto.MissionResponseDTO;
 import com.example.umc10th.domain.mission.entity.Location;
 import com.example.umc10th.domain.mission.entity.Mission;
-import com.example.umc10th.domain.mission.entity.mapping.MemberMission;
+import com.example.umc10th.domain.mission.entity.mapping.UserMission;
 import com.example.umc10th.domain.mission.exception.MissionException;
 import com.example.umc10th.domain.mission.exception.code.MissionErrorCode;
 import com.example.umc10th.domain.mission.repository.LocationRepository;
-import com.example.umc10th.domain.mission.repository.MemberMissionRepository;
 import com.example.umc10th.domain.mission.repository.MissionRepository;
+import com.example.umc10th.domain.mission.repository.UserMissionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.data.domain.PageRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -26,11 +26,11 @@ import org.springframework.data.domain.PageRequest;
 public class MissionService {
 
     private final MissionRepository missionRepository;
-    private final MemberMissionRepository memberMissionRepository;
+    private final UserMissionRepository userMissionRepository;
     private final MemberRepository memberRepository;
     private final LocationRepository locationRepository;
 
-    public MissionResponseDTO.MissionListDTO getMemberMissions(Long userId, Boolean isCompleted, Long regionId, Long cursor) {
+    public MissionResponseDTO.MissionListDTO getUserMissions(Long userId, Boolean isCompleted, Long regionId, Long cursor) {
         User user = memberRepository.findById(userId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
@@ -39,7 +39,7 @@ public class MissionService {
                         .orElseThrow(() -> new MissionException(MissionErrorCode.REGION_NOT_FOUND))
                 : null;
 
-        Slice<MemberMission> memberMissionSlice = memberMissionRepository.findByUserIdWithCursor(
+        Slice<UserMission> userMissionSlice = userMissionRepository.findByUserWithCursor(
                 user,
                 isCompleted,
                 location,
@@ -47,7 +47,7 @@ public class MissionService {
                 PageRequest.of(0, 10)
         );
 
-        return MissionConverter.toMemberMissionListDTO(memberMissionSlice);
+        return MissionConverter.toUserMissionListDTO(userMissionSlice);
     }
 
     public MissionResponseDTO.MissionStatsDTO getMissionCountByRegion(Long userId, Long regionId) {
@@ -57,7 +57,7 @@ public class MissionService {
         Location location = locationRepository.findById(regionId)
             .orElseThrow(() -> new MissionException(MissionErrorCode.REGION_NOT_FOUND));
 
-        Long count = memberMissionRepository.countSuccessfulMissionsByUserIdAndRegionId(user, location);
+        Long count = userMissionRepository.countSuccessfulMissionsByUserAndRegion(user, location);
 
         return new MissionResponseDTO.MissionStatsDTO(location.getName(), count);
     }
@@ -69,21 +69,21 @@ public class MissionService {
         Mission mission = missionRepository.findById(missionId)
             .orElseThrow(() -> new MissionException(MissionErrorCode.MISSION_NOT_FOUND));
 
-        MemberMission memberMission = MemberMission.builder()
+        UserMission userMission = UserMission.builder()
             .user(user)
             .mission(mission)
             .isCompleted(false)
             .build();
 
-        MemberMission savedMemberMission = memberMissionRepository.save(memberMission);
-        return MissionConverter.toMissionChallengeResultDTO(savedMemberMission);
+        UserMission savedUserMission = userMissionRepository.save(userMission);
+        return MissionConverter.toMissionChallengeResultDTO(savedUserMission);
     }
 
     @Transactional
-    public void updateMissionCompletion(Long missionId) {
-        MemberMission memberMission = memberMissionRepository.findById(missionId)
-            .orElseThrow(() -> new MissionException(MissionErrorCode.MEMBER_MISSION_NOT_FOUND));
+    public void updateMissionCompletion(Long userMissionId) {
+        UserMission userMission = userMissionRepository.findById(userMissionId)
+            .orElseThrow(() -> new MissionException(MissionErrorCode.USER_MISSION_NOT_FOUND));
         
-        memberMission.complete();
+        userMission.complete();
     }
 }

@@ -2,11 +2,9 @@ package com.example.umc10th.domain.mission.converter;
 
 import com.example.umc10th.domain.mission.dto.MissionResponseDTO;
 import com.example.umc10th.domain.mission.entity.Mission;
-import com.example.umc10th.domain.mission.entity.mapping.MemberMission;
+import com.example.umc10th.domain.mission.entity.mapping.UserMission;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 
 public class MissionConverter {
@@ -22,15 +20,15 @@ public class MissionConverter {
         );
     }
 
-    public static MissionResponseDTO.MissionPreviewDTO toMissionPreviewDTO(MemberMission memberMission) {
-        Mission mission = memberMission.getMission();
+    public static MissionResponseDTO.MissionPreviewDTO toMissionPreviewDTO(UserMission userMission) {
+        Mission mission = userMission.getMission();
         return new MissionResponseDTO.MissionPreviewDTO(
             mission.getId(),
             mission.getStore().getName(),
             mission.getConditionPrice(),
             mission.getAwardPoint(),
             mission.getDeadline(),
-            memberMission.getIsCompleted()
+            userMission.getIsCompleted()
         );
     }
 
@@ -44,8 +42,8 @@ public class MissionConverter {
         );
     }
 
-    public static MissionResponseDTO.MissionListDTO toMemberMissionListDTO(Slice<MemberMission> memberMissionSlice) {
-        List<MemberMission> content = memberMissionSlice.getContent();
+    public static MissionResponseDTO.MissionListDTO toUserMissionListDTO(Slice<UserMission> userMissionSlice) {
+        List<UserMission> content = userMissionSlice.getContent();
 
         List<MissionResponseDTO.MissionPreviewDTO> previewDTOs = content.stream()
                 .map(MissionConverter::toMissionPreviewDTO)
@@ -56,10 +54,10 @@ public class MissionConverter {
         return new MissionResponseDTO.MissionListDTO(previewDTOs, nextCursor);
     }
 
-    public static MissionResponseDTO.MissionChallengeResultDTO toMissionChallengeResultDTO(MemberMission memberMission) {
+    public static MissionResponseDTO.MissionChallengeResultDTO toMissionChallengeResultDTO(UserMission userMission) {
         return new MissionResponseDTO.MissionChallengeResultDTO(
-            memberMission.getId(),
-            memberMission.getCreatedAt()
+            userMission.getId(),
+            userMission.getCreatedAt()
         );
     }
 }

@@ -26,9 +26,9 @@ public class Term extends BaseEntity {
     @Column(nullable = false, length = 255)
     private String type;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(nullable = true, columnDefinition = "TEXT")
     private String body;
 
-    @Column(length = 20)
+    @Column(nullable = true, length = 20)
     private String version;
 }

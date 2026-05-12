@@ -29,9 +29,7 @@ public class MemberResponseDTO {
     public record NotificationListDTO(
         List<NotificationPreviewDTO> notifications,
         Integer listSize,
-        Integer totalPage,
-        Long totalElements,
-        Boolean isFirst,
+        Long nextCursor,
         Boolean isLast
     ) {}
 

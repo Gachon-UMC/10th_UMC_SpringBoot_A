@@ -33,7 +33,7 @@ public class MissionResponseDTO {
     ) {}
 
     public record MissionChallengeResultDTO(
-        Long memberMissionId,
+        Long userMissionId,
         LocalDateTime createdAt
     ) {}
 }

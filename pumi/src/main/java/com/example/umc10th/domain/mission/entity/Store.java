@@ -28,19 +28,19 @@ public class Store extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "region_id")
+    @JoinColumn(name = "region_id", nullable = false)
     private Location location;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
     @Column(nullable = false, length = 20)
     private String name;
 
-    @Column(length = 20)
+    @Column(nullable = true, length = 20)
     private String type;
 
-    @Column(length = 20)
+    @Column(nullable = true, length = 20)
     private String ownerNumber;
 }

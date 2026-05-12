@@ -27,12 +27,12 @@ public class Notification extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(length = 20)
+    @Column(nullable = false, length = 20)
     private String title;
 
-    @Column(length = 20)
+    @Column(nullable = false, length = 20)
     private String body;
 }

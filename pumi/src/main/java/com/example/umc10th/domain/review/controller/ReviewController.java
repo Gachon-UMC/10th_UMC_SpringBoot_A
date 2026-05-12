@@ -16,13 +16,13 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @PostMapping("/missions/{missionId}")
+    @PostMapping("/missions/{userMissionId}")
     public Response<ReviewResponseDTO.ReviewResultDTO> createReview(
         @RequestParam Long userId,
-        @PathVariable Long missionId,
+        @PathVariable Long userMissionId,
         @RequestBody ReviewRequestDTO.WriteReviewDTO request
     ) {
         BaseSuccessCode code = ReviewSuccessCode.OK;
-        return Response.onSuccess(code, reviewService.createReview(userId, missionId, request));
+        return Response.onSuccess(code, reviewService.createReview(userId, userMissionId, request));
     }
 }

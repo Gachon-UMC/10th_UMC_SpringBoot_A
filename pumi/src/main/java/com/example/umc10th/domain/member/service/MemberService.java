@@ -17,10 +17,7 @@ import com.example.umc10th.domain.member.repository.NotificationSettingRepositor
 import com.example.umc10th.domain.member.repository.PreferredFoodRepository;
 import com.example.umc10th.domain.member.repository.ServiceAcceptanceRepository;
 import com.example.umc10th.domain.member.repository.TermRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

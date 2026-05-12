@@ -17,13 +17,14 @@ public class MissionController {
 
     // 홈 화면, 진행중, 진행 완료 미션 목록 모두 사용 가능.
     @GetMapping("/me/mission")
-    public Response<MissionResponseDTO.MissionListDTO> getMemberMissions(
+    public Response<MissionResponseDTO.MissionListDTO> getUserMissions(
         @RequestParam Long userId,
         @RequestParam(required = false) Boolean isCompleted,
+        @RequestParam(required = false) Long regionId,
         @RequestParam(required = false) Long cursor
     ) {
         BaseSuccessCode code = MissionSuccessCode.OK;
-        return Response.onSuccess(code, missionService.getMemberMissions(userId, isCompleted, cursor));
+        return Response.onSuccess(code, missionService.getUserMissions(userId, isCompleted, regionId, cursor));
     }
 
     @GetMapping("/missions/count/region/{id}")
@@ -41,10 +42,10 @@ public class MissionController {
         return Response.onSuccess(code, missionService.createMissionChallenge(userId, id));
     }
 
-    @PostMapping("/missions/{id}/complete")
-    public Response<String> updateMissionCompletion(@PathVariable Long id) {
+    @PostMapping("/missions/{userMissionId}/complete")
+    public Response<String> updateMissionCompletion(@PathVariable Long userMissionId) {
         BaseSuccessCode code = MissionSuccessCode.OK;
-        missionService.updateMissionCompletion(id);
+        missionService.updateMissionCompletion(userMissionId);
         return Response.onSuccess(code, "미션 완료 성공");
     }
 }

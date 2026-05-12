@@ -2,7 +2,7 @@ package com.example.umc10th.domain.review.entity;
 
 import com.example.umc10th.domain.member.entity.User;
 import com.example.umc10th.domain.mission.entity.Store;
-import com.example.umc10th.domain.mission.entity.mapping.MemberMission;
+import com.example.umc10th.domain.mission.entity.mapping.UserMission;
 import com.example.umc10th.global.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,23 +30,24 @@ public class Review extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_id")
+    @JoinColumn(name = "store_id", nullable = false)
     private Store store;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_mission_id")
-    private MemberMission memberMission;
+    @JoinColumn(name = "user_mission_id", nullable = false)
+    private UserMission userMission;
 
+    @Column(nullable = false)
     private Float rate;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    public void setMemberMission(MemberMission memberMission) {
-        this.memberMission = memberMission;
+    public void setUserMission(UserMission userMission) {
+        this.userMission = userMission;
     }
 }
