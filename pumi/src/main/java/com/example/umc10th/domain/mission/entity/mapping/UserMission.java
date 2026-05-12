@@ -1,5 +1,7 @@
-package com.example.umc10th.domain.review.entity;
+package com.example.umc10th.domain.mission.entity.mapping;
 
+import com.example.umc10th.domain.member.entity.User;
+import com.example.umc10th.domain.mission.entity.Mission;
 import com.example.umc10th.global.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,16 +22,24 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Reply extends BaseEntity {
+public class UserMission extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "review_id", nullable = false)
-    private Review review;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String content;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "mission_id", nullable = false)
+    private Mission mission;
+
+    @Column(nullable = false)
+    private Boolean isCompleted;
+
+    public void complete() {
+        this.isCompleted = true;
+    }
 }
