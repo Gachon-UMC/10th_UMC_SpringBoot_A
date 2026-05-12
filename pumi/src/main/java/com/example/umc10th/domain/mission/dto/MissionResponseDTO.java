@@ -23,6 +23,15 @@ public class MissionResponseDTO {
         Long nextCursor
     ) {}
 
+    public record OngoingMissionListDTO(
+        List<MissionPreviewDTO> missions,
+        Integer listSize,
+        Integer totalPage,
+        Long totalElements,
+        Boolean isFirst,
+        Boolean isLast
+    ) {}
+
     public record MissionStatsDTO(
         String regionName,
         Long successCount
