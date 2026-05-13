@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,15 +34,17 @@ public class MissionController implements MissionApi {
 
     /**
      * 사용자 미션 목록 조회
-     * GET /api/users/me/missions
+     * POST /api/users/me/missions
      */
-    @GetMapping("/api/users/me/missions")
+    @PostMapping("/api/users/me/missions")
     public ApiResponse<MissionResponse.MissionListDTO> getUserMissions(
-            @RequestParam Long userId,
-            @RequestParam String status,
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "10") Integer size) {
-        return ApiResponse.onSuccess(missionService.getUserMissions(userId, status, page, size));
+            @RequestBody MissionRequest.MyMissionListDTO request) {
+        return ApiResponse.onSuccess(missionService.getUserMissions(
+                request.getUserId(),
+                request.getStatus(),
+                request.getPage(),
+                request.getSize()
+        ));
     }
 
     /**
