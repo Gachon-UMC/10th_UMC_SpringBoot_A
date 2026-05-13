@@ -17,6 +17,9 @@ public enum MemberSuccessCode implements BaseSuccessCode {
     MEMBER_UPDATE_OK(HttpStatus.OK,
             "MEMBER200_3",
             "성공적으로 회원정보 수정이 완료되었습니다."),
+    MY_PAGE_OK(HttpStatus.OK,
+            "MISSION200_5",
+            "마이페이지 호출을 성공적으로 처리했습니다."),
 
     ;
     private final HttpStatus status;

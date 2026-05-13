@@ -9,22 +9,27 @@ import java.util.List;
 @Getter
 public class MissionResDTO {
 
-    @Getter
     @Builder
-    public static class HomeDTO {
-        private String lacationName;
-        private Integer totalPoint;
-        private List<MissionInfo> missions;
+    public record HomeDTO(
+            String locationName,
+            Integer totalPoint,
+            Integer completedMissionCount,
+            List<MissionInfo> missions
+    ) {}
+    public record MissionInfo(
+                String storeName,
+                String storeCategory,
+                String content,
+                LocalDate dueDate,
+                Integer point,
+                MissionStatus status
+    ) {}
+
+    public enum MissionStatus {
+        IN_PROGRESS,
+        SUCCESS,
+        NOT_STARTED
     }
 
-    @Getter
-    @Builder
-    public static class MissionInfo {
-        private String storeName;
-        private String storeCategory;
-        private String content;
-        private LocalDate dueDate;
-        private Integer point;
-        private Integer status;
-    }
+
 }

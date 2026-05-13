@@ -2,49 +2,40 @@ package com.example.umc10th.domain.mission.controller;
 
 
 import com.example.umc10th.domain.mission.dto.MissionResDTO;
-import com.example.umc10th.domain.mission.entity.Mission;
+import com.example.umc10th.domain.mission.enums.Status;
 import com.example.umc10th.domain.mission.exception.code.MissionSuccessCode;
+import com.example.umc10th.domain.mission.service.MissionService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/my")
 public class MissionController {
-    @GetMapping("/home")
-    public ApiResponse<MissionResDTO.HomeDTO> home(){
-        MissionResDTO.HomeDTO response = MissionResDTO.HomeDTO.builder()
-                .lacationName("수정구")
-                .totalPoint(1000)
-                .missions(List.of())
-                .build();
 
-        return ApiResponse.onSuccess(MissionSuccessCode.HOME_OK, response);
-    }
+    private final MissionService missionService;
 
-    @GetMapping("my/missions")
-    public ApiResponse<List<MissionResDTO.MissionInfo>> myMission(){
-        List<MissionResDTO.MissionInfo> response  = List.of(
-                MissionResDTO.MissionInfo.builder()
-                        .storeName("맥도날드")
-                        .storeCategory("패스트푸드")
-                        .content("버거 먹기")
-                        .point(100)
-                        .build()
-        );
+    @GetMapping("/missions")
+    public ApiResponse<Page<MissionResDTO.MissionInfo>> myMission(
+            @RequestParam Status status,
+            @RequestParam int page,
+            @RequestParam int size
+    ){
+        Page<MissionResDTO.MissionInfo> response =
+                missionService.getMyMissions(1L, status, PageRequest.of(page, size));
 
         return ApiResponse.onSuccess(MissionSuccessCode.MISSION_LIST_OK, response);
-
     }
-
-    @PatchMapping("/my/missions/{userMissionId}/success")
-    public ApiResponse<String> missionSuccess(
-            @PathVariable Long userMissionId
-    ){
-        // TODO: service 연결 예정
-        return ApiResponse.onSuccess(MissionSuccessCode.MISSION_COMPLETE_OK, "미션 성공!");
+    @GetMapping("/home")
+    public ApiResponse<MissionResDTO.HomeDTO> home(
+            @RequestParam Long memberId,
+            @RequestParam int page,
+            @RequestParam int size
+    ) {
+        MissionResDTO.HomeDTO response = missionService.getHome(memberId, PageRequest.of(page, size));
+        return ApiResponse.onSuccess(MissionSuccessCode.HOME_OK, response);
     }
-
 }

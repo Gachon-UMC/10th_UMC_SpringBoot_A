@@ -7,9 +7,7 @@ import java.math.BigDecimal;
 @Getter
 public class ReviewReqDTO {
 
-    @Getter
-    public static class CreateReview {
-        private String reviewContent;
-        private BigDecimal star;
-    }
+    public record CreateReview(
+            String reviewContent,
+            BigDecimal star){}
 }

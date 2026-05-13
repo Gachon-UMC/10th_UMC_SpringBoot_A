@@ -1,4 +1,4 @@
-package com.example.umc10th.domain.review.entity;
+package com.example.umc10th.domain.store.entity;
 
 
 import jakarta.persistence.*;
@@ -12,16 +12,12 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="reivew_photo")
-public class ReviewPhoto {
+@Table(name="location")
+public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "photo_url", nullable = false)
-    private String photoUrl;
-
-    @ManyToOne
-    @JoinColumn(name="review_id" , nullable = false)
-    private Review review;
+    @Column(name="name", nullable = false, unique = true)
+    private String name;
 }

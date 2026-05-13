@@ -8,12 +8,13 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum ReviewErrorCode implements BaseErrorCode {
+    RESPONSE_ID_BAD_REQUEST(HttpStatus.BAD_REQUEST,
+            "REVIEW400",
+            "리뷰 답글을 찾을 수 없습니다"),
     REVIEW_NOT_FOUND(HttpStatus.NOT_FOUND,
             "REVIEW404_1",
             "리뷰 호출을 실패했습니다."),
-    RESPONSE_ID_NOT_FOUND(HttpStatus.NOT_FOUND,
-            "REVIEW404_2",
-            "답글 ID가 잘못되었습니다."), //메시지를 어떻게 달아야할지 잘 모르겠어요ㅠ
+
     ;
 
     private final HttpStatus status;
