@@ -2,15 +2,17 @@ package com.example.umc10th.domain.user.controller;
 
 import com.example.umc10th.domain.user.dto.UserReqDTO;
 import com.example.umc10th.domain.user.dto.UserResDTO;
-import com.example.umc10th.domain.user.enums.Gender;
 import com.example.umc10th.domain.user.exception.code.UserSuccessCode;
 import com.example.umc10th.domain.user.service.UserService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
+import com.example.umc10th.global.auth.CurrentUserProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,49 +20,42 @@ import java.time.LocalDateTime;
 public class UserController {
 
     private final UserService userService;
+    private final CurrentUserProvider currentUserProvider;
 
-    // 내 정보 조회
     @GetMapping("/me")
     public ApiResponse<UserResDTO.MyInfoDTO> getMyInfo() {
-        Long userId = 1L;
+        Long userId = currentUserProvider.getCurrentUserId();
 
         UserResDTO.MyInfoDTO response = userService.getMyInfo(userId);
 
         return ApiResponse.onSuccess(UserSuccessCode.GET_MY_INFO_SUCCESS, response);
     }
 
-    // 내 정보 수정
     @PatchMapping("/me")
     public ApiResponse<UserResDTO.UpdateMyInfoResultDTO> updateMyInfo(
             @RequestBody UserReqDTO.UpdateMyInfoDTO request
     ) {
-        UserResDTO.UpdateMyInfoResultDTO response = UserResDTO.UpdateMyInfoResultDTO.builder()
-                .userId(1L)
-                .nickname(request.nickname())
-                .address(request.address())
-                .detailAddress(request.detailAddress())
-                .profileImageUrl(request.profileImageUrl())
-                .updatedAt(LocalDateTime.now())
-                .build();
+        Long userId = currentUserProvider.getCurrentUserId();
+
+        UserResDTO.UpdateMyInfoResultDTO response = userService.updateMyInfo(userId, request);
 
         return ApiResponse.onSuccess(UserSuccessCode.UPDATE_MY_INFO_SUCCESS, response);
     }
 
     @DeleteMapping("/me")
     public ApiResponse<UserResDTO.DeleteUserResultDTO> deleteMyAccount() {
-        UserResDTO.DeleteUserResultDTO response = UserResDTO.DeleteUserResultDTO.builder()
-                .userId(1L)
-                .deletedAt(LocalDateTime.now())
-                .build();
+        Long userId = currentUserProvider.getCurrentUserId();
+
+        UserResDTO.DeleteUserResultDTO response = userService.deleteMyAccount(userId);
 
         return ApiResponse.onSuccess(UserSuccessCode.DELETE_USER_SUCCESS, response);
     }
 
     @GetMapping("/me/points")
     public ApiResponse<UserResDTO.PointDTO> getMyPoint() {
-        UserResDTO.PointDTO response = UserResDTO.PointDTO.builder()
-                .point(2500)
-                .build();
+        Long userId = currentUserProvider.getCurrentUserId();
+
+        UserResDTO.PointDTO response = userService.getMyPoint(userId);
 
         return ApiResponse.onSuccess(UserSuccessCode.GET_POINT_SUCCESS, response);
     }
@@ -84,5 +79,4 @@ public class UserController {
 
         return ApiResponse.onSuccess(UserSuccessCode.UPDATE_NOTIFICATION_SETTING_SUCCESS, response);
     }
-
 }

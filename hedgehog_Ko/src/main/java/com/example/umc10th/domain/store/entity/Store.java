@@ -3,7 +3,15 @@ package com.example.umc10th.domain.store.entity;
 import com.example.umc10th.domain.foodCategory.entity.FoodCategory;
 import com.example.umc10th.domain.region.entity.Region;
 import com.example.umc10th.global.entity.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +29,7 @@ public class Store extends BaseEntity {
     private Long id;
 
     @Column(name = "store_name", nullable = false, length = 255)
-    private String storeName;
+    private String name;
 
     @Column(name = "manager_number", length = 20)
     private String managerNumber;
@@ -45,7 +53,7 @@ public class Store extends BaseEntity {
 
     @Builder
     private Store(
-            String storeName,
+            String name,
             String managerNumber,
             Region region,
             String detailAddress,
@@ -53,7 +61,7 @@ public class Store extends BaseEntity {
             FoodCategory foodCategory,
             Boolean open
     ) {
-        this.storeName = storeName;
+        this.name = name;
         this.managerNumber = managerNumber;
         this.region = region;
         this.detailAddress = detailAddress;

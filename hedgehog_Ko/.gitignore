@@ -36,5 +36,26 @@ out/
 ### VS Code ###
 .vscode/
 
+### OS ###
+.DS_Store
+Thumbs.db
+desktop.ini
+
+### Logs ###
+*.log
+logs/
+
 ### 환경설정 ###
 .env
+.env.*
+!.env.example
+src/main/resources/application-local.yml
+src/main/resources/application-local.yaml
+
+### JVM ###
+hs_err_pid*
+replay_pid*
+
+### AGENT 관련 파일 ###
+AGENTS.md
+reference/*

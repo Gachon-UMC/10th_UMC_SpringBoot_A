@@ -1,6 +1,12 @@
 package com.example.umc10th.domain.foodCategory.entity;
 
-import jakarta.persistence.*;
+import com.example.umc10th.global.entity.BaseEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "food_category")
-public class FoodCategory {
+public class FoodCategory extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,11 +24,11 @@ public class FoodCategory {
     private Long id;
 
     @Column(name = "food_category_name", nullable = false, length = 50, unique = true)
-    private String foodCategoryName;
+    private String name;
 
     @Builder
-    private FoodCategory(String foodCategoryName) {
-        this.foodCategoryName = foodCategoryName;
+    private FoodCategory(String name) {
+        this.name = name;
     }
 
 }

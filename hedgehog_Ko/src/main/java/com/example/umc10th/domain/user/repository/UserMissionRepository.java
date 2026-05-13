@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserMissionRepository extends JpaRepository<UserMission, Long> {
 
@@ -31,5 +32,19 @@ public interface UserMissionRepository extends JpaRepository<UserMission, Long> 
             @Param("status") MissionStatus status,
             @Param("cursor") Long cursor,
             Pageable pageable
+    );
+
+    @Query("""
+        SELECT um
+        FROM UserMission um
+        JOIN FETCH um.user u
+        JOIN FETCH um.mission m
+        JOIN FETCH m.store s
+        WHERE um.id = :userMissionId
+          AND m.deletedAt IS NULL
+          AND s.deletedAt IS NULL
+    """)
+    Optional<UserMission> findActiveUserMissionById(
+            @Param("userMissionId") Long userMissionId
     );
 }
