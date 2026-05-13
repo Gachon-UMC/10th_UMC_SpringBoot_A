@@ -32,8 +32,6 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class ReviewService {
 
-    private static final BigDecimal MIN_SCORE = new BigDecimal("1.0");
-    private static final BigDecimal MAX_SCORE = new BigDecimal("5.0");
     // 커서 기반 페이지네이션 기본 조회 개수
     private static final int DEFAULT_SIZE = 10;
 
@@ -48,8 +46,6 @@ public class ReviewService {
             Long storeId,
             ReviewRequest.CreateDTO request
     ) {
-        validateScore(request.getScore());
-
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
@@ -86,12 +82,6 @@ public class ReviewService {
         List<Review> reviews = hasNext ? fetchedReviews.subList(0, resolvedSize) : fetchedReviews;
 
         return ReviewConverter.toMyReviewListDTO(reviews, hasNext, sortType == ReviewSortType.SCORE);
-    }
-
-    private void validateScore(BigDecimal score) {
-        if (score == null || score.compareTo(MIN_SCORE) < 0 || score.compareTo(MAX_SCORE) > 0) {
-            throw new ReviewException(ReviewErrorCode.INVALID_SCORE);
-        }
     }
 
     private ReviewSortType parseSortType(String sortBy) {

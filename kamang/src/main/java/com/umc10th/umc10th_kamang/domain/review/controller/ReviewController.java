@@ -4,6 +4,7 @@ import com.umc10th.umc10th_kamang.domain.review.dto.ReviewRequest;
 import com.umc10th.umc10th_kamang.domain.review.dto.ReviewResponse;
 import com.umc10th.umc10th_kamang.domain.review.service.ReviewService;
 import com.umc10th.umc10th_kamang.global.apiPayload.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +29,7 @@ public class ReviewController implements ReviewApi {
     public ApiResponse<ReviewResponse.CreateResultDTO> createReview(
             @PathVariable Long storeId,
             @RequestParam Long userId,
-            @RequestBody ReviewRequest.CreateDTO request) {
+            @Valid @RequestBody ReviewRequest.CreateDTO request) {
         return ApiResponse.onSuccess(reviewService.createReview(userId, storeId, request));
     }
 
