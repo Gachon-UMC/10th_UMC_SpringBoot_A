@@ -1,19 +1,13 @@
 package com.example.umc10th.domain.member.entity;
 
-import com.example.umc10th.domain.member.entity.mapping.MemberFood;
-import com.example.umc10th.domain.member.entity.mapping.MemberTerm;
 import com.example.umc10th.domain.member.enums.Gender;
 import com.example.umc10th.domain.member.enums.SocialType;
-import com.example.umc10th.domain.mission.entity.mapping.MemberMission;
 import com.example.umc10th.domain.mission.enums.Address;
-import com.example.umc10th.domain.review.entity.Review;
 import com.example.umc10th.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity @Table(name = "member")
 @Getter @Builder
@@ -67,19 +61,6 @@ public class Member extends BaseEntity {
     @Column(name = "profile_url", columnDefinition = "TEXT")
     private String profileUrl;
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<MemberFood> memberFoodList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<MemberTerm> memberTermList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<MemberMission> memberMissionList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<Review> reviewList = new ArrayList<>();
+    // 양방향 매핑 제거 — 필요 시 Repository에서 조회하는 방식으로 처리
+    // memberFoodList, memberTermList, memberMissionList, reviewList 삭제
 }

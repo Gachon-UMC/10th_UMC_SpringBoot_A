@@ -5,7 +5,7 @@ import java.util.List;
 
 public class MissionResDTO {
 
-    // GET /api/missions
+    // 내 미션 목록 응답
     @Builder
     public record MissionList(
             Integer page,
@@ -18,31 +18,33 @@ public class MissionResDTO {
         public record MissionItem(
                 Long missionId,
                 String storeName,
-                String description,
-                Integer reward,
+                String conditional,
+                Integer point,
                 Boolean isComplete
         ) {}
     }
 
-    // POST /api/missions/{missionId}/challenge
+    // [8번 반영] 홈 화면 미션 목록 응답 — 별도 DTO
     @Builder
-    public record Challenge(
-            Long missionId,
-            String status
-    ) {}
+    public record HomeMissionList(
+            Integer page,
+            Integer size,
+            Long totalElements,
+            Integer totalPages,
+            List<HomeMissionItem> missions
+    ) {
+        @Builder
+        public record HomeMissionItem(
+                Long missionId,
+                String storeName,
+                String conditional,
+                Integer point,
+                Integer deadline
+        ) {}
+    }
 
-    // POST /api/missions/{missionId}/complete-request
-    @Builder
-    public record CompleteRequest(
-            Long missionId,
-            String status
-    ) {}
-
-    // PATCH /api/missions/{missionId}/verify
-    @Builder
-    public record Verify(
-            Long missionId,
-            String status,
-            Integer rewardEarned
-    ) {}
+    // 기존 유지
+    public record Challenge(Long memberMissionId) {}
+    public record CompleteRequest(Long memberMissionId) {}
+    public record Verify(Long memberMissionId) {}
 }

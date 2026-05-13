@@ -27,10 +27,11 @@ public class MissionService {
         return MissionConverter.toMissionList(missionPage);
     }
 
+    // 홈 미션에 memberId 파라미터 추가
     @Transactional(readOnly = true)
-    public MissionResDTO.MissionList getHomeMissions(Address address, int page, int size) {
+    public MissionResDTO.HomeMissionList getHomeMissions(Address address, Long memberId, int page, int size) {
         Page<Mission> missionPage = missionRepository.findAvailableMissionsByRegion(
-                address, PageRequest.of(page, size));
+                address, memberId, PageRequest.of(page, size));
         return MissionConverter.toHomeMissionList(missionPage);
     }
 }

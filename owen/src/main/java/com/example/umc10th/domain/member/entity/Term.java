@@ -1,10 +1,8 @@
 package com.example.umc10th.domain.member.entity;
 
-import com.example.umc10th.domain.member.entity.mapping.MemberTerm;
+import com.example.umc10th.domain.member.enums.TermType;
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity @Table(name = "term")
 @Getter @Builder
@@ -17,9 +15,7 @@ public class Term {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private com.example.umc10th.domain.member.enums.Term name;
+    private TermType name;
 
-    @OneToMany(mappedBy = "term", cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<MemberTerm> memberTermList = new ArrayList<>();
+    // 양방향 매핑 제거
 }

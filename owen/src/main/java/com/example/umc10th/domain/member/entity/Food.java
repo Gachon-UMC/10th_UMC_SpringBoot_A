@@ -1,11 +1,8 @@
 package com.example.umc10th.domain.member.entity;
 
-import com.example.umc10th.domain.member.entity.mapping.MemberFood;
 import com.example.umc10th.domain.member.enums.FoodCategory;
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity @Table(name = "food")
 @Getter @Builder
@@ -20,7 +17,5 @@ public class Food {
     @Column(nullable = false)
     private FoodCategory name;
 
-    @OneToMany(mappedBy = "food", cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<MemberFood> memberFoodList = new ArrayList<>();
+    // 양방향 매핑 제거 — cascade ALL 제거
 }
