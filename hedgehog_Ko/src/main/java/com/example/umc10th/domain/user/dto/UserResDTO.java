@@ -23,7 +23,8 @@ public class UserResDTO {
     public record MyInfoDTO(
             Long userId,
             String name,
-            String profileUrl,
+            String nickname,
+            String profileImageUrl,
             String email,
             String phoneNumber,
             Gender gender,
@@ -36,8 +37,10 @@ public class UserResDTO {
     @Builder
     public record UpdateMyInfoResultDTO(
             Long userId,
-            String nickName,
-            String phoneNumber,
+            String nickname,
+            String address,
+            String detailAddress,
+            String profileImageUrl,
             LocalDateTime updatedAt
     ) {
     }

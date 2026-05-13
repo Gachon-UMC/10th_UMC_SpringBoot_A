@@ -1,7 +1,6 @@
 package com.example.umc10th.domain.mission.dto;
 
 import com.example.umc10th.domain.mission.enums.MissionStatus;
-import com.example.umc10th.domain.store.enums.StoreCategory;
 import lombok.Builder;
 
 import java.time.LocalDate;
@@ -25,9 +24,10 @@ public class MissionResDTO {
             Long missionId,
             Long storeId,
             String storeName,
-            StoreCategory category,
+            Long foodCategoryId,
+            String foodCategoryName,
             String missionCondition,
-            Long point,
+            Integer point,
             LocalDate deadline, // 실제 마감일
             Integer dDay, // WF에 뜨는 D-7 부분
             MissionStatus status

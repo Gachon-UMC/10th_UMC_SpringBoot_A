@@ -67,14 +67,12 @@ public class ReviewController {
     @PostMapping("/stores/{storeId}/reviews")
     public ApiResponse<ReviewResDTO.CreateReviewResultDTO> createReview(
             @PathVariable Long storeId,
-            @RequestBody ReviewReqDTO.CreateReviewDTO request,
-            @RequestHeader(value = "Authorization", required = false) String authorization
+            @RequestBody ReviewReqDTO.CreateReviewDTO request
     ) {
-        ReviewResDTO.CreateReviewResultDTO response = ReviewResDTO.CreateReviewResultDTO.builder()
-                .reviewId(1L)
-                .storeId(storeId)
-                .createdAt(LocalDateTime.now())
-                .build();
+        Long userId = 1L; // 임시 처리 (토큰이 없음..)
+
+        ReviewResDTO.CreateReviewResultDTO response =
+                reviewService.createReview(userId, storeId, request);
 
         return ApiResponse.onSuccess(ReviewSuccessCode.CREATE_REVIEW_SUCCESS, response);
     }
@@ -82,8 +80,7 @@ public class ReviewController {
     @GetMapping("/users/me/reviews")
     public ApiResponse<ReviewResDTO.MyReviewListDTO> getMyReviews(
             @RequestParam(required = false) Long cursor,
-            @RequestParam(defaultValue = "10") Integer size,
-            @RequestHeader(value = "Authorization", required = false) String authorization
+            @RequestParam(defaultValue = "10") Integer size
     ) {
         List<ReviewResDTO.MyReviewPreviewDTO> reviews = List.of(
                 ReviewResDTO.MyReviewPreviewDTO.builder()
@@ -127,8 +124,7 @@ public class ReviewController {
     @PatchMapping("/users/me/reviews/{reviewId}")
     public ApiResponse<ReviewResDTO.UpdateReviewResultDTO> updateMyReview(
             @PathVariable Long reviewId,
-            @RequestBody ReviewReqDTO.UpdateReviewDTO request,
-            @RequestHeader(value = "Authorization", required = false) String authorization
+            @RequestBody ReviewReqDTO.UpdateReviewDTO request
     ) {
         ReviewResDTO.UpdateReviewResultDTO response = ReviewResDTO.UpdateReviewResultDTO.builder()
                 .reviewId(reviewId)
@@ -140,8 +136,7 @@ public class ReviewController {
 
     @DeleteMapping("/users/me/reviews/{reviewId}")
     public ApiResponse<ReviewResDTO.DeleteReviewResultDTO> deleteMyReview(
-            @PathVariable Long reviewId,
-            @RequestHeader(value = "Authorization", required = false) String authorization
+            @PathVariable Long reviewId
     ) {
         ReviewResDTO.DeleteReviewResultDTO response = ReviewResDTO.DeleteReviewResultDTO.builder()
                 .reviewId(reviewId)

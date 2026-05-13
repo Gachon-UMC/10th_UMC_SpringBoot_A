@@ -1,4 +1,4 @@
-package com.example.umc10th.domain.region.exception.code;
+package com.example.umc10th.domain.foodCategory.exception.code;
 
 import com.example.umc10th.global.apiPayload.code.BaseErrorCode;
 import lombok.Getter;
@@ -7,17 +7,17 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum RegionErrorCode implements BaseErrorCode {
+public enum FoodCategoryErrorCode implements BaseErrorCode {
 
-    REGION_NOT_FOUND(
+    FOOD_CATEGORY_NOT_FOUND(
             HttpStatus.NOT_FOUND,
-            "REGION404_1",
-            "지역을 찾을 수 없습니다."
+            "FOOD404_1",
+            "음식 카테고리를 찾을 수 없습니다."
     ),
-    INVALID_REGION_REQUEST(
+    INVALID_FOOD_CATEGORY_REQUEST(
             HttpStatus.BAD_REQUEST,
-            "REGION400_1",
-            "지역 요청 값이 올바르지 않습니다."
+            "FOOD400_1",
+            "음식 카테고리 요청 값이 올바르지 않습니다."
     );
 
     private final HttpStatus status;
