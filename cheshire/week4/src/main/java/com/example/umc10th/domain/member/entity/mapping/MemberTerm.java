@@ -2,6 +2,8 @@ package com.example.umc10th.domain.member.entity.mapping;
 
 import com.example.umc10th.domain.member.entity.Member;
 import com.example.umc10th.domain.member.entity.Term;
+import com.example.umc10th.domain.member.enums.Agreement;
+import com.example.umc10th.domain.member.enums.FoodName;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,5 +29,11 @@ public class MemberTerm {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "term_id")
     private Term term;
+
+    @Column(name="agreement")
+    @Enumerated(EnumType.STRING)
+    private Agreement agreement;
+
+
 
 }

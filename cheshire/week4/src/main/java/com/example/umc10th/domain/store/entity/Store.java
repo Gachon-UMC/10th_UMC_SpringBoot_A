@@ -1,6 +1,7 @@
 package com.example.umc10th.domain.store.entity;
 
 
+import com.example.umc10th.domain.member.enums.FoodName;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,7 +34,7 @@ public class Store {
 
 //    식당 카테고리
     @Column(name = "store_category", nullable = false)
-    private String storeCategory; // erd 상에는 String으로 되어있는데 그냥 enum으로 관리하는게 더 편할거같음..
+    private FoodName storeCategory; // FoodName이랑 카테고리 차이가 없을 것 같아서
 
 //    식당 상세주소
     @Column(name = "store_address", nullable = false)

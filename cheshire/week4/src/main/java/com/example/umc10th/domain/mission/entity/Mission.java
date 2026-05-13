@@ -30,7 +30,7 @@ public class Mission {
     private Integer point;
 
     @ManyToOne
-    @JoinColumn(name="store_id")
+    @JoinColumn(name="store_id", nullable = false)
     private Store store;
 
 

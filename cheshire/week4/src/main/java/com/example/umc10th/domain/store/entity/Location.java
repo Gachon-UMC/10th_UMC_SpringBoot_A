@@ -18,6 +18,6 @@ public class Location {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="name", nullable = false) // 이것도 Address Enum으로 관리하는게 맞을까요?
+    @Column(name="name", nullable = false, unique = true)
     private String name;
 }

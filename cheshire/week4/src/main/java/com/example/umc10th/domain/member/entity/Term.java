@@ -1,6 +1,5 @@
 package com.example.umc10th.domain.member.entity;
 
-import com.example.umc10th.domain.member.enums.TermName;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,7 +17,13 @@ public class Term {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="name")
-    @Enumerated(EnumType.STRING)
-    private TermName name;
+    @Column(name="content" , nullable = false)
+    private String content;
+
+
+
+    @Column(name="is_required", nullable = false)
+    private boolean is_required;
+
+
 }
