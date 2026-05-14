@@ -35,11 +35,12 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "reply_id")
     private Reply reply;
 
     @Builder.Default
-    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "review_id")
     private List<ReviewPhoto> reviewPhotoList = new ArrayList<>();
 }

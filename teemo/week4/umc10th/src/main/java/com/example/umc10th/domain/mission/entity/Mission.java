@@ -1,6 +1,5 @@
 package com.example.umc10th.domain.mission.entity;
 
-import com.example.umc10th.domain.mission.entity.mapping.UserMission;
 import com.example.umc10th.domain.store.entity.Store;
 import com.example.umc10th.global.common.BaseEntity;
 import jakarta.persistence.*;
@@ -8,8 +7,6 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -36,8 +33,4 @@ public class Mission extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id")
     private Store store;
-
-    @Builder.Default
-    @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL)
-    private List<UserMission> userMissionList = new ArrayList<>();
 }
