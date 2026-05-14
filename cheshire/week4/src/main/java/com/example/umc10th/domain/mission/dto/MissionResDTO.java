@@ -1,5 +1,6 @@
 package com.example.umc10th.domain.mission.dto;
 
+import com.example.umc10th.domain.member.enums.FoodName;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -18,7 +19,7 @@ public class MissionResDTO {
     ) {}
     public record MissionInfo(
                 String storeName,
-                String storeCategory,
+                FoodName storeCategory,
                 String content,
                 LocalDate dueDate,
                 Integer point,
@@ -31,5 +32,18 @@ public class MissionResDTO {
         NOT_STARTED
     }
 
+    @Builder
+    public record GetMission(
+            Long missionId,
+            Integer point,
+            String content
+    ){}
 
+//   페이지네이션 틀
+    @Builder
+    public record Pagination<T>(
+            List<T> data,
+            Integer pageNumber,
+            Integer pageSize
+    ){}
 }

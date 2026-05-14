@@ -14,6 +14,7 @@ public class MemberController {
     private final MemberService memberService;
 
 
+
     @PostMapping("/signup")
     public ApiResponse<?> signUp(@RequestBody MemberReqDTO.SignUp request){
         return null;
