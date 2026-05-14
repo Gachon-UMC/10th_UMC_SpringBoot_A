@@ -9,8 +9,13 @@ import com.example.umc10th.domain.review.repository.ReviewRepository;
 import com.example.umc10th.domain.user.entity.User;
 import com.example.umc10th.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +25,25 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
     private final StoreRepository storeRepository;
+
+    public Slice<Review> getUserReviewList(Long userId, Long cursorId, BigDecimal cursorStar, String sortBy, Integer size) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        Pageable pageable = PageRequest.of(0, size);
+
+        if ("star".equals(sortBy)) {
+            return reviewRepository.findAllByUserOrderByStarDescIdDesc(user, cursorStar, cursorId, pageable);
+        } else {
+            return reviewRepository.findAllByUserOrderByIdDesc(user, cursorId, pageable);
+        }
+    }
+
+    public Long getUserReviewCount(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+        return reviewRepository.countByUser(user);
+    }
 
     @Transactional
     public Review createReview(Long storeId, ReviewReqDTO.ReviewCreateDTO request) {

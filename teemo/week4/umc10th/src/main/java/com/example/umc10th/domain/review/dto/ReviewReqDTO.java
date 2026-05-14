@@ -21,4 +21,13 @@ public class ReviewReqDTO {
         @DecimalMax(value = "5.0")
         private BigDecimal star;
     }
+
+    @Getter
+    public static class ReviewListRequestDTO {
+        @NotNull
+        private Long userId;
+        private Long cursorId;
+        private BigDecimal cursorStar;
+        private String sortBy; // "id" or "star"
+    }
 }

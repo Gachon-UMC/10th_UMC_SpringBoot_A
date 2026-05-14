@@ -28,6 +28,21 @@ public class ReviewController {
         return ApiResponse.onSuccess(ReviewConverter.toReviewResultDTO(review));
     }
 
+    @PostMapping("/reviews/my")
+    @Operation(summary = "내가 작성한 리뷰 목록 조회 API", description = "내가 작성한 리뷰 목록을 커서 기반 페이지네이션으로 조회합니다. sortBy에 'id' 또는 'star'를 입력하세요.")
+    public ApiResponse<ReviewResDTO.ReviewPreViewListDTO> getMyReviews(
+            @RequestBody @Valid ReviewReqDTO.ReviewListRequestDTO request,
+            @RequestParam(name = "size", defaultValue = "10") Integer size) {
+        var reviewSlice = reviewService.getUserReviewList(
+                request.getUserId(),
+                request.getCursorId(),
+                request.getCursorStar(),
+                request.getSortBy(),
+                size);
+        Long totalCount = reviewService.getUserReviewCount(request.getUserId());
+        return ApiResponse.onSuccess(ReviewConverter.toReviewPreViewListDTO(reviewSlice, totalCount));
+    }
+
     @GetMapping("/users/reviews")
     @Operation(summary = "나의 리뷰 목록 조회 API", description = "내가 작성한 리뷰 목록을 조회하는 API입니다.")
     @Parameter(name = "page", description = "페이지 번호 (0번부터 시작)")
