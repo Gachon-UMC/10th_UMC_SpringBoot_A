@@ -15,4 +15,10 @@ public class MissionReqDTO {
     public static class MissionUpdateDTO {
         private String status;
     }
+
+    @Getter
+    public static class OngoingMissionListDTO {
+        private Long userId;
+        private Integer page;
+    }
 }

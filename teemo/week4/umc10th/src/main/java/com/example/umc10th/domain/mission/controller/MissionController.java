@@ -9,6 +9,7 @@ import com.example.umc10th.domain.mission.service.MissionService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,14 @@ import org.springframework.web.bind.annotation.*;
 public class MissionController {
 
     private final MissionService missionService;
+
+    @PostMapping("/ongoing")
+    @Operation(summary = "내가 진행중인 미션 목록 조회 API", description = "사용자가 진행 중인 미션 목록을 오프셋 기반 페이지네이션으로 조회합니다.")
+    public ApiResponse<MissionResDTO.MissionPreviewListDTO> getOngoingMissions(
+            @RequestBody @Valid MissionReqDTO.OngoingMissionListDTO request) {
+        var userMissionPage = missionService.getMyMissionList(request.getUserId(), false, request.getPage());
+        return ApiResponse.onSuccess(MissionConverter.toMissionPreviewListDTO(userMissionPage));
+    }
 
     @GetMapping("/regions")
     @Operation(summary = "지역 별 도전 가능 미션 조회 API", description = "현재 선택된 지역의 도전 가능한 미션 목록을 조회하는 API입니다.")
