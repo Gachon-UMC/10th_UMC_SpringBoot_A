@@ -24,6 +24,17 @@ public class UserResDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class MyPageDTO {
+        private String name;
+        private String email;
+        private String phoneNumber;
+        private Integer point;
+    }
+
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class TermListDTO {
         private List<TermDTO> terms;
     }

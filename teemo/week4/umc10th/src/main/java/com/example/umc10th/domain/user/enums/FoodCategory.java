@@ -1,0 +1,5 @@
+package com.example.umc10th.domain.user.enums;
+
+public enum FoodCategory {
+    KOREAN, JAPANESE, CHINESE, WESTERN, SNACK, CAFE, NONE
+}
