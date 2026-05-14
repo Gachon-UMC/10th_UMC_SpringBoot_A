@@ -45,7 +45,6 @@ public class ReviewResDTO {
             String storeName,
             Double starRate,
             String content,
-            List<String> photoUrls,
             ReplyDTO reply,
             LocalDateTime createdAt,
             LocalDateTime updatedAt

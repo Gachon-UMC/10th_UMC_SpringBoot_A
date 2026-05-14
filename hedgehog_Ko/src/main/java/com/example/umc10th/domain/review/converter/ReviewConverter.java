@@ -71,7 +71,6 @@ public class ReviewConverter {
                 .storeName(store.getName())
                 .starRate(review.getStarRate())
                 .content(review.getContent())
-                .photoUrls(List.of())
                 .reply(null)
                 .createdAt(review.getCreatedAt())
                 .updatedAt(review.getUpdatedAt())

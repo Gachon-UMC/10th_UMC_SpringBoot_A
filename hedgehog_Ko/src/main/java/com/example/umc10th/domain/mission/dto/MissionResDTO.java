@@ -12,9 +12,9 @@ public class MissionResDTO {
     @Builder
     public record MyMissionListDTO(
             List<MyMissionPreviewDTO> missions,
-            Long nextCursor,
-            Boolean hasNext,
-            Integer size
+            Integer pageNumber,
+            Integer pageSize,
+            Boolean hasNext
     ) {
     }
 

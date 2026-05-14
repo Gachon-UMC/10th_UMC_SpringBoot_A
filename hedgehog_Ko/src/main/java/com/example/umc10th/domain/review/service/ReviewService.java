@@ -18,6 +18,8 @@ import com.example.umc10th.domain.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -80,7 +82,8 @@ public class ReviewService {
     public ReviewResDTO.MyReviewListDTO getMyReviews(
             Long userId,
             Long cursor,
-            Integer size
+            Integer size,
+            String sort
     ) {
         validateCursor(cursor);
 
@@ -89,19 +92,14 @@ public class ReviewService {
         }
 
         int pageSize = getPageSize(size);
-        PageRequest pageRequest = PageRequest.of(0, pageSize + 1);
-
-        List<Review> reviews = reviewRepository.findMyReviews(userId, cursor, pageRequest);
-        boolean hasNext = reviews.size() > pageSize;
-
-        if (hasNext) {
-            reviews = reviews.subList(0, pageSize);
-        }
+        PageRequest pageRequest = PageRequest.of(0, pageSize, getMyReviewSort(sort));
+        Slice<Review> reviewSlice = reviewRepository.findMyReviews(userId, cursor, pageRequest);
+        List<Review> reviews = reviewSlice.getContent();
 
         return ReviewConverter.toMyReviewListDTO(
                 reviews,
                 getNextCursor(reviews),
-                hasNext,
+                reviewSlice.hasNext(),
                 reviews.size()
         );
     }
@@ -162,6 +160,21 @@ public class ReviewService {
         if (cursor != null && cursor <= 0) {
             throw new ReviewException(ReviewErrorCode.INVALID_REVIEW_CURSOR);
         }
+    }
+
+    private Sort getMyReviewSort(String sort) {
+        if (sort == null || sort.isBlank() || sort.equals("id")) {
+            return Sort.by(Sort.Direction.DESC, "id");
+        }
+
+        if (sort.equals("starRate")) {
+            return Sort.by(
+                    Sort.Order.desc("starRate"),
+                    Sort.Order.desc("id")
+            );
+        }
+
+        throw new ReviewException(ReviewErrorCode.INVALID_REVIEW_SORT);
     }
 
     private Long getNextCursor(List<Review> reviews) {

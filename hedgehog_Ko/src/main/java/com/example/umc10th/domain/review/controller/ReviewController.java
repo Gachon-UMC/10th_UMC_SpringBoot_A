@@ -5,7 +5,7 @@ import com.example.umc10th.domain.review.dto.ReviewResDTO;
 import com.example.umc10th.domain.review.exception.code.ReviewSuccessCode;
 import com.example.umc10th.domain.review.service.ReviewService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
-import com.example.umc10th.global.auth.CurrentUserProvider;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ReviewController {
 
     private final ReviewService reviewService;
-    private final CurrentUserProvider currentUserProvider;
 
     @GetMapping("/stores/{storeId}/reviews")
     public ApiResponse<ReviewResDTO.StoreReviewListDTO> getStoreReviews(
@@ -39,9 +38,9 @@ public class ReviewController {
     @PostMapping("/stores/{storeId}/reviews")
     public ApiResponse<ReviewResDTO.CreateReviewResultDTO> createReview(
             @PathVariable Long storeId,
-            @RequestBody ReviewReqDTO.CreateReviewDTO request
+            @Valid @RequestBody ReviewReqDTO.CreateReviewDTO request
     ) {
-        Long userId = currentUserProvider.getCurrentUserId();
+        Long userId = 1L;
 
         ReviewResDTO.CreateReviewResultDTO response = reviewService.createReview(userId, storeId, request);
 
@@ -51,11 +50,12 @@ public class ReviewController {
     @GetMapping("/users/me/reviews")
     public ApiResponse<ReviewResDTO.MyReviewListDTO> getMyReviews(
             @RequestParam(required = false) Long cursor,
-            @RequestParam(defaultValue = "10") Integer size
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(defaultValue = "id") String sort
     ) {
-        Long userId = currentUserProvider.getCurrentUserId();
+        Long userId = 1L;
 
-        ReviewResDTO.MyReviewListDTO response = reviewService.getMyReviews(userId, cursor, size);
+        ReviewResDTO.MyReviewListDTO response = reviewService.getMyReviews(userId, cursor, size, sort);
 
         return ApiResponse.onSuccess(ReviewSuccessCode.GET_MY_REVIEW_LIST_SUCCESS, response);
     }
@@ -65,7 +65,7 @@ public class ReviewController {
             @PathVariable Long reviewId,
             @RequestBody ReviewReqDTO.UpdateReviewDTO request
     ) {
-        Long userId = currentUserProvider.getCurrentUserId();
+        Long userId = 1L;
 
         ReviewResDTO.UpdateReviewResultDTO response = reviewService.updateMyReview(userId, reviewId, request);
 
@@ -76,7 +76,7 @@ public class ReviewController {
     public ApiResponse<ReviewResDTO.DeleteReviewResultDTO> deleteMyReview(
             @PathVariable Long reviewId
     ) {
-        Long userId = currentUserProvider.getCurrentUserId();
+        Long userId = 1L;
 
         ReviewResDTO.DeleteReviewResultDTO response = reviewService.deleteMyReview(userId, reviewId);
 

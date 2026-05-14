@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +16,12 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "food_category")
+@Table(
+        name = "food_category",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_food_category_name", columnNames = "food_category_name")
+        }
+)
 public class FoodCategory extends BaseEntity {
 
     @Id
@@ -23,7 +29,7 @@ public class FoodCategory extends BaseEntity {
     @Column(name = "food_category_id")
     private Long id;
 
-    @Column(name = "food_category_name", nullable = false, length = 50, unique = true)
+    @Column(name = "food_category_name", nullable = false, length = 50)
     private String name;
 
     @Builder

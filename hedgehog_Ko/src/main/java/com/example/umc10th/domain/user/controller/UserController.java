@@ -5,7 +5,6 @@ import com.example.umc10th.domain.user.dto.UserResDTO;
 import com.example.umc10th.domain.user.exception.code.UserSuccessCode;
 import com.example.umc10th.domain.user.service.UserService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
-import com.example.umc10th.global.auth.CurrentUserProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,11 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private final UserService userService;
-    private final CurrentUserProvider currentUserProvider;
 
     @GetMapping("/me")
     public ApiResponse<UserResDTO.MyInfoDTO> getMyInfo() {
-        Long userId = currentUserProvider.getCurrentUserId();
+        Long userId = 1L;
 
         UserResDTO.MyInfoDTO response = userService.getMyInfo(userId);
 
@@ -35,7 +33,7 @@ public class UserController {
     public ApiResponse<UserResDTO.UpdateMyInfoResultDTO> updateMyInfo(
             @RequestBody UserReqDTO.UpdateMyInfoDTO request
     ) {
-        Long userId = currentUserProvider.getCurrentUserId();
+        Long userId = 1L;
 
         UserResDTO.UpdateMyInfoResultDTO response = userService.updateMyInfo(userId, request);
 
@@ -44,7 +42,7 @@ public class UserController {
 
     @DeleteMapping("/me")
     public ApiResponse<UserResDTO.DeleteUserResultDTO> deleteMyAccount() {
-        Long userId = currentUserProvider.getCurrentUserId();
+        Long userId = 1L;
 
         UserResDTO.DeleteUserResultDTO response = userService.deleteMyAccount(userId);
 
@@ -53,7 +51,7 @@ public class UserController {
 
     @GetMapping("/me/points")
     public ApiResponse<UserResDTO.PointDTO> getMyPoint() {
-        Long userId = currentUserProvider.getCurrentUserId();
+        Long userId = 1L;
 
         UserResDTO.PointDTO response = userService.getMyPoint(userId);
 

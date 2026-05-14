@@ -37,9 +37,9 @@ public class MissionConverter {
 
     public static MissionResDTO.MyMissionListDTO toMyMissionListDTO(
             List<UserMission> userMissions,
-            Long nextCursor,
-            Boolean hasNext,
-            Integer size
+            Integer pageNumber,
+            Integer pageSize,
+            Boolean hasNext
     ) {
         List<MissionResDTO.MyMissionPreviewDTO> missions = userMissions.stream()
                 .map(MissionConverter::toMyMissionPreviewDTO)
@@ -47,9 +47,9 @@ public class MissionConverter {
 
         return MissionResDTO.MyMissionListDTO.builder()
                 .missions(missions)
-                .nextCursor(nextCursor)
+                .pageNumber(pageNumber)
+                .pageSize(pageSize)
                 .hasNext(hasNext)
-                .size(size)
                 .build();
     }
 

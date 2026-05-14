@@ -12,12 +12,13 @@ import com.example.umc10th.domain.user.exception.code.UserErrorCode;
 import com.example.umc10th.domain.user.repository.UserMissionRepository;
 import com.example.umc10th.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -34,39 +35,30 @@ public class MissionService {
             Long userId,
             Long regionId,
             MissionStatus status,
-            Long cursor,
-            Integer size
+            Integer pageSize,
+            Integer pageNumber,
+            String sort
     ) {
         if (!userRepository.existsByIdAndDeletedAtIsNull(userId)) {
             throw new UserException(UserErrorCode.USER_NOT_FOUND);
         }
 
-        int pageSize = size == null ? 10 : size;
-        PageRequest pageRequest = PageRequest.of(0, pageSize + 1);
+        validatePage(pageSize, pageNumber);
 
-        List<UserMission> userMissions = userMissionRepository.findMyMissions(
+        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize, getSort(sort));
+
+        Page<UserMission> userMissions = userMissionRepository.findMyMissions(
                 userId,
                 regionId,
                 status,
-                cursor,
                 pageRequest
         );
 
-        boolean hasNext = userMissions.size() > pageSize;
-
-        if (hasNext) {
-            userMissions = userMissions.subList(0, pageSize);
-        }
-
-        Long nextCursor = userMissions.isEmpty()
-                ? null
-                : userMissions.get(userMissions.size() - 1).getId();
-
         return MissionConverter.toMyMissionListDTO(
-                userMissions,
-                nextCursor,
-                hasNext,
-                userMissions.size()
+                userMissions.getContent(),
+                userMissions.getNumber(),
+                userMissions.getSize(),
+                userMissions.hasNext()
         );
     }
 
@@ -212,5 +204,35 @@ public class MissionService {
         }
 
         throw new MissionException(MissionErrorCode.INVALID_MISSION_STATUS);
+    }
+
+    private void validatePage(Integer pageSize, Integer pageNumber) {
+        if (pageSize == null || pageSize <= 0 || pageNumber == null || pageNumber < 0) {
+            throw new MissionException(MissionErrorCode.INVALID_MISSION_PAGE);
+        }
+    }
+
+    private Sort getSort(String sort) {
+        if (sort == null || sort.isBlank()) {
+            return Sort.by(Sort.Direction.DESC, "id");
+        }
+
+        String[] sortTokens = sort.split(",");
+        String property = sortTokens[0].trim();
+        Sort.Direction direction = Sort.Direction.DESC;
+
+        if (sortTokens.length > 1) {
+            direction = Sort.Direction.fromOptionalString(sortTokens[1].trim())
+                    .orElseThrow(() -> new MissionException(MissionErrorCode.INVALID_MISSION_SORT));
+        }
+
+        if (!property.equals("id")
+                && !property.equals("deadline")
+                && !property.equals("createdAt")
+                && !property.equals("updatedAt")) {
+            throw new MissionException(MissionErrorCode.INVALID_MISSION_SORT);
+        }
+
+        return Sort.by(direction, property);
     }
 }
