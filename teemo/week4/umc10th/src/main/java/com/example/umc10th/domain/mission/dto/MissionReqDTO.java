@@ -8,18 +8,18 @@ import lombok.Getter;
 public class MissionReqDTO {
 
     @Getter
-    public static class MissionCompleteDTO {
+    public static class MissionComplete {
         @JsonProperty("is_completed")
         private Boolean isCompleted;
     }
 
     @Getter
-    public static class MissionUpdateDTO {
+    public static class MissionUpdate {
         private String status;
     }
 
     @Getter
-    public static class OngoingMissionListDTO {
+    public static class OngoingMissionList {
         @NotNull
         private Long userId;
         @CheckPage

@@ -5,8 +5,8 @@ import com.example.umc10th.domain.user.entity.User;
 
 public class UserConverter {
 
-    public static UserResDTO.MyPageDTO toMyPageDTO(User user) {
-        return UserResDTO.MyPageDTO.builder()
+    public static UserResDTO.MyPage toMyPageDTO(User user) {
+        return UserResDTO.MyPage.builder()
                 .name(user.getName())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())

@@ -14,7 +14,7 @@ public class MissionResDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class MissionCountDTO {
+    public static class MissionCount {
         private Integer count;
     }
 
@@ -22,7 +22,7 @@ public class MissionResDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class MissionCompleteResultDTO {
+    public static class MissionCompleteResult {
         private Long missionId;
         private Boolean isCompleted;
         private LocalDateTime updatedAt;
@@ -32,8 +32,8 @@ public class MissionResDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class MissionPreviewListDTO {
-        private List<MissionPreviewDTO> missionList;
+    public static class MissionPreviewList {
+        private List<MissionPreview> missionList;
         private Integer listSize;
         private Integer totalPage;
         private Long totalElements;
@@ -45,7 +45,7 @@ public class MissionResDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class MissionPreviewDTO {
+    public static class MissionPreview {
         private Long missionId;
         private String storeName;
         private String missionSpec;

@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 public class ReviewReqDTO {
 
     @Getter
-    public static class ReviewCreateDTO {
+    public static class Create {
         @NotNull(message = "작성자 ID는 필수입니다.")
         private Long userId;
 
@@ -23,7 +23,7 @@ public class ReviewReqDTO {
     }
 
     @Getter
-    public static class ReviewListRequestDTO {
+    public static class ListRequest {
         @NotNull
         private Long userId;
         private Long cursorId;

@@ -15,7 +15,7 @@ public class ReviewResDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ReviewResultDTO {
+    public static class ReviewResult {
         private Long reviewId;
         private LocalDateTime createdAt;
     }
@@ -24,15 +24,15 @@ public class ReviewResDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ReviewListDTO {
-        private List<ReviewDTO> reviews;
+    public static class ReviewList {
+        private List<ReviewPreview> reviews;
     }
 
     @Builder
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ReviewDTO {
+    public static class ReviewPreview {
         private Long reviewId;
         private String userName;
         private String storeName;
@@ -48,8 +48,8 @@ public class ReviewResDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class ReviewPreViewListDTO {
-        private List<ReviewDTO> reviewList;
+    public static class ReviewPreViewList {
+        private List<ReviewPreview> reviewList;
         private Integer listSize;
         private Long totalReviewCount;
         private Long nextCursorId;

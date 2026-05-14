@@ -26,9 +26,15 @@ import java.util.Optional;
 @RestControllerAdvice(annotations = {RestController.class})
 public class ExceptionAdvice extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(value = GeneralException.class)
+    public ResponseEntity<Object> onThrowException(GeneralException generalException, HttpServletRequest request) {
+        log.error("GeneralException occurred: {}", generalException.getMessage());
+        return handleExceptionInternal(generalException, null, request);
+    }
 
-    @ExceptionHandler
+    @ExceptionHandler(value = ConstraintViolationException.class)
     public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
+        log.error("ConstraintViolationException occurred: {}", e.getMessage());
         String errorMessage = e.getConstraintViolations().stream()
                 .map(ConstraintViolation::getMessage)
                 .findFirst()
@@ -37,11 +43,10 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         return handleExceptionInternalConstraint(e, GeneralErrorCode.valueOf(errorMessage), HttpHeaders.EMPTY, request);
     }
 
-
     @Override
     public ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException e, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-
+        log.error("MethodArgumentNotValidException occurred: {}", e.getMessage());
         Map<String, String> errors = new LinkedHashMap<>();
 
         e.getBindingResult().getFieldErrors().stream()
@@ -54,16 +59,11 @@ public class ExceptionAdvice extends ResponseEntityExceptionHandler {
         return handleExceptionInternalArgs(e,HttpHeaders.EMPTY,GeneralErrorCode.BAD_REQUEST,request,errors);
     }
 
-    @ExceptionHandler
+    @ExceptionHandler(value = Exception.class)
     public ResponseEntity<Object> exception(Exception e, WebRequest request) {
-        e.printStackTrace();
+        log.error("Unhandled Exception occurred", e);
 
         return handleExceptionInternalFalse(e, GeneralErrorCode.INTERNAL_SERVER_ERROR, HttpHeaders.EMPTY, GeneralErrorCode.INTERNAL_SERVER_ERROR.getHttpStatus(),request, e.getMessage());
-    }
-
-    @ExceptionHandler(value = GeneralException.class)
-    public ResponseEntity<Object> onThrowException(GeneralException generalException, HttpServletRequest request) {
-        return handleExceptionInternal(generalException, null, request);
     }
 
     private ResponseEntity<Object> handleExceptionInternal(GeneralException generalException,
