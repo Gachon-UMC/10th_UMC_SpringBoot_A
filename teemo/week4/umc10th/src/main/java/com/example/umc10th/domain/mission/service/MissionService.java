@@ -13,7 +13,7 @@ import com.example.umc10th.domain.user.exception.code.UserErrorCode;
 import com.example.umc10th.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,16 +26,16 @@ public class MissionService {
     private final UserRepository userRepository;
     private final MissionRepository missionRepository;
 
-    public MissionResDTO.MissionPreviewList getMissionListByLocation(Address address, Integer page) {
-        Page<Mission> missionPage = missionRepository.findAllByLocationName(address, PageRequest.of(page, 10));
+    public MissionResDTO.MissionPreviewList getMissionListByLocation(Address address, Pageable pageable) {
+        Page<Mission> missionPage = missionRepository.findAllByLocationName(address, pageable);
         return MissionConverter.toMissionPreviewListFromMission(missionPage);
     }
 
-    public MissionResDTO.MissionPreviewList getMyMissionList(Long userId, Boolean isCompleted, Integer page) {
+    public MissionResDTO.MissionPreviewList getMyMissionList(Long userId, Boolean isCompleted, Pageable pageable) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
-        Page<UserMission> userMissionPage = userMissionRepository.findAllByUserAndIsComplete(user, isCompleted, PageRequest.of(page, 10));
+        Page<UserMission> userMissionPage = userMissionRepository.findAllByUserAndIsComplete(user, isCompleted, pageable);
         return MissionConverter.toMissionPreviewList(userMissionPage);
     }
 }

@@ -12,6 +12,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,7 +33,7 @@ public class UserController {
     @GetMapping("/auth/terms")
     @Operation(summary = "약관 목록 조회 API", description = "회원가입 시 필요한 약관 목록을 조회하는 API입니다.")
     public ApiResponse<UserResDTO.TermList> getTerms() {
-        return ApiResponse.onSuccess(null);
+        return ApiResponse.of(GeneralSuccessCode.OK, null);
     }
 
     @PostMapping("/auth/signup")
@@ -46,9 +48,9 @@ public class UserController {
     public ApiResponse<MissionResDTO.MissionPreviewList> getMyMissions(
             @PathVariable Long userId,
             @RequestParam(name = "is_completed") Boolean isCompleted,
-            @RequestParam(name = "page", defaultValue = "0") Integer page) {
+            @PageableDefault(size = 10) Pageable pageable) {
 
-        return ApiResponse.of(GeneralSuccessCode.OK, missionService.getMyMissionList(userId, isCompleted, page));
+        return ApiResponse.of(GeneralSuccessCode.OK, missionService.getMyMissionList(userId, isCompleted, pageable));
     }
 
 }
