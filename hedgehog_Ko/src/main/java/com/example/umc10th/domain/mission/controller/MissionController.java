@@ -20,10 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users/me/missions")
-public class MissionController {
+public class MissionController implements MissionControllerDocs {
 
     private final MissionService missionService;
 
+    @Override
     @PostMapping
     public ApiResponse<MissionResDTO.MyMissionListDTO> getMyMissions(
             @Valid @RequestBody MissionReqDTO.GetMyMissionsDTO request,
@@ -45,6 +46,7 @@ public class MissionController {
         return ApiResponse.onSuccess(MissionSuccessCode.GET_MY_MISSION_LIST_SUCCESS, response);
     }
 
+    @Override
     @PatchMapping("/{userMissionId}")
     public ApiResponse<MissionResDTO.StartMissionResultDTO> startMission(
             @PathVariable Long userMissionId
@@ -56,6 +58,7 @@ public class MissionController {
         return ApiResponse.onSuccess(MissionSuccessCode.START_MISSION_SUCCESS, response);
     }
 
+    @Override
     @PatchMapping("/{userMissionId}/cancel")
     public ApiResponse<MissionResDTO.CancelMissionResultDTO> cancelMission(
             @PathVariable Long userMissionId
@@ -67,6 +70,7 @@ public class MissionController {
         return ApiResponse.onSuccess(MissionSuccessCode.CANCEL_MISSION_SUCCESS, response);
     }
 
+    @Override
     @PostMapping("/{userMissionId}/verification/request")
     public ApiResponse<MissionResDTO.VerificationRequestResultDTO> requestMissionVerification(
             @PathVariable Long userMissionId
@@ -79,6 +83,7 @@ public class MissionController {
         return ApiResponse.onSuccess(MissionSuccessCode.REQUEST_MISSION_VERIFICATION_SUCCESS, response);
     }
 
+    @Override
     @PostMapping("/{userMissionId}/verification/confirm")
     public ApiResponse<MissionResDTO.VerificationConfirmResultDTO> confirmMissionVerification(
             @PathVariable Long userMissionId

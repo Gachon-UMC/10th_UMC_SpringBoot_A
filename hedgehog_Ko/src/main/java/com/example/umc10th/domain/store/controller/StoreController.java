@@ -5,18 +5,21 @@ import com.example.umc10th.domain.store.exception.code.StoreSuccessCode;
 import com.example.umc10th.domain.store.service.StoreService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/stores")
-public class StoreController {
+public class StoreController implements StoreControllerDocs {
     private final StoreService storeService;
 
     // 특정 지역 가게 목록 조회
+    @Override
     @GetMapping
     public ApiResponse<StoreResDTO.StoreListDTO> getStoreList(
             @RequestParam Long regionId,
@@ -55,6 +58,7 @@ public class StoreController {
     }
 
     // 가게 상세 조회
+    @Override
     @GetMapping("/{storeId}")
     public ApiResponse<StoreResDTO.StoreDetailDTO> getStoreDetail(
             @PathVariable Long storeId

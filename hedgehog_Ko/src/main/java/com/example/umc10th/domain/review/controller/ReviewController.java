@@ -20,10 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
-public class ReviewController {
+public class ReviewController implements ReviewControllerDocs {
 
     private final ReviewService reviewService;
 
+    @Override
     @GetMapping("/stores/{storeId}/reviews")
     public ApiResponse<ReviewResDTO.StoreReviewListDTO> getStoreReviews(
             @PathVariable Long storeId,
@@ -35,6 +36,7 @@ public class ReviewController {
         return ApiResponse.onSuccess(ReviewSuccessCode.GET_STORE_REVIEW_LIST_SUCCESS, response);
     }
 
+    @Override
     @PostMapping("/stores/{storeId}/reviews")
     public ApiResponse<ReviewResDTO.CreateReviewResultDTO> createReview(
             @PathVariable Long storeId,
@@ -47,6 +49,7 @@ public class ReviewController {
         return ApiResponse.onSuccess(ReviewSuccessCode.CREATE_REVIEW_SUCCESS, response);
     }
 
+    @Override
     @GetMapping("/users/me/reviews")
     public ApiResponse<ReviewResDTO.MyReviewListDTO> getMyReviews(
             @RequestParam(required = false) Long cursor,
@@ -60,6 +63,7 @@ public class ReviewController {
         return ApiResponse.onSuccess(ReviewSuccessCode.GET_MY_REVIEW_LIST_SUCCESS, response);
     }
 
+    @Override
     @PatchMapping("/users/me/reviews/{reviewId}")
     public ApiResponse<ReviewResDTO.UpdateReviewResultDTO> updateMyReview(
             @PathVariable Long reviewId,
@@ -72,6 +76,7 @@ public class ReviewController {
         return ApiResponse.onSuccess(ReviewSuccessCode.UPDATE_REVIEW_SUCCESS, response);
     }
 
+    @Override
     @DeleteMapping("/users/me/reviews/{reviewId}")
     public ApiResponse<ReviewResDTO.DeleteReviewResultDTO> deleteMyReview(
             @PathVariable Long reviewId

@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/foodCategory")
-public class FoodCategoryController {
+public class FoodCategoryController implements FoodCategoryControllerDocs {
 
     private final FoodCategoryService foodCategoryService;
 
+    @Override
     @GetMapping
     public ApiResponse<FoodCategoryResDTO.FoodCategoryListDTO> getFoodCategories() {
         FoodCategoryResDTO.FoodCategoryListDTO response = foodCategoryService.getFoodCategories();

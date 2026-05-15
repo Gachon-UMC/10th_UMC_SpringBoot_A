@@ -13,16 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/terms")
-public class TermController {
+public class TermController implements TermControllerDocs {
 
     private final TermService termService;
 
+    @Override
     @GetMapping
     public ApiResponse<TermResDTO.TermListDTO> getTerms() {
         TermResDTO.TermListDTO response = termService.getTerms();
         return ApiResponse.onSuccess(TermSuccessCode.GET_TERM_LIST_SUCCESS, response);
     }
 
+    @Override
     @GetMapping("/{termId}")
     public ApiResponse<TermResDTO.TermDetailDTO> getTermDetail(
             @PathVariable Long termId

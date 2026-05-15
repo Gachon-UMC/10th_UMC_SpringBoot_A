@@ -12,10 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/regions")
-public class RegionController {
+public class RegionController implements RegionControllerDocs {
 
     private final RegionService regionService;
 
+    @Override
     @GetMapping
     public ApiResponse<RegionResDTO.RegionListDTO> getRegions() {
         RegionResDTO.RegionListDTO response = regionService.getRegions();

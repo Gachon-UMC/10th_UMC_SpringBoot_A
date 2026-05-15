@@ -16,10 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
-public class UserController {
+public class UserController implements UserControllerDocs {
 
     private final UserService userService;
 
+    @Override
     @GetMapping("/me")
     public ApiResponse<UserResDTO.MyInfoDTO> getMyInfo() {
         Long userId = 1L;
@@ -29,6 +30,7 @@ public class UserController {
         return ApiResponse.onSuccess(UserSuccessCode.GET_MY_INFO_SUCCESS, response);
     }
 
+    @Override
     @PatchMapping("/me")
     public ApiResponse<UserResDTO.UpdateMyInfoResultDTO> updateMyInfo(
             @RequestBody UserReqDTO.UpdateMyInfoDTO request
@@ -40,6 +42,7 @@ public class UserController {
         return ApiResponse.onSuccess(UserSuccessCode.UPDATE_MY_INFO_SUCCESS, response);
     }
 
+    @Override
     @DeleteMapping("/me")
     public ApiResponse<UserResDTO.DeleteUserResultDTO> deleteMyAccount() {
         Long userId = 1L;
@@ -49,6 +52,7 @@ public class UserController {
         return ApiResponse.onSuccess(UserSuccessCode.DELETE_USER_SUCCESS, response);
     }
 
+    @Override
     @GetMapping("/me/points")
     public ApiResponse<UserResDTO.PointDTO> getMyPoint() {
         Long userId = 1L;
@@ -58,6 +62,7 @@ public class UserController {
         return ApiResponse.onSuccess(UserSuccessCode.GET_POINT_SUCCESS, response);
     }
 
+    @Override
     @GetMapping("/me/notification-settings")
     public ApiResponse<UserResDTO.NotificationSettingDTO> getNotificationSetting() {
         UserResDTO.NotificationSettingDTO response = UserResDTO.NotificationSettingDTO.builder()
@@ -67,6 +72,7 @@ public class UserController {
         return ApiResponse.onSuccess(UserSuccessCode.GET_NOTIFICATION_SETTING_SUCCESS, response);
     }
 
+    @Override
     @PatchMapping("/me/notification-settings")
     public ApiResponse<UserResDTO.NotificationSettingDTO> updateNotificationSetting(
             @RequestBody UserReqDTO.UpdateNotificationSettingDTO request
