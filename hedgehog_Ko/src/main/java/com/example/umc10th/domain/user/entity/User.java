@@ -3,12 +3,19 @@ package com.example.umc10th.domain.user.entity;
 import com.example.umc10th.domain.user.enums.Gender;
 import com.example.umc10th.domain.user.enums.SocialType;
 import com.example.umc10th.global.entity.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
 
 @Entity
@@ -47,11 +54,11 @@ public class User extends BaseEntity {
     @Column(name = "detail_address", nullable = false, length = 255)
     private String detailAddress;
 
-    @Column(name = "social_uid", nullable = false, length = 255)
+    @Column(name = "social_uid", length = 255)
     private String socialUid;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "social_type", nullable = false, length = 30)
+    @Column(name = "social_type", length = 30)
     private SocialType socialType;
 
     @Column(name = "point", nullable = false)
@@ -59,6 +66,9 @@ public class User extends BaseEntity {
 
     @Column(name = "email", nullable = false, length = 100)
     private String email;
+
+    @Column(name = "password", nullable = false, length = 100)
+    private String password;
 
     @Column(name = "phone_number", nullable = false, length = 20)
     private String phoneNumber;
@@ -103,6 +113,7 @@ public class User extends BaseEntity {
             String socialUid,
             SocialType socialType,
             String email,
+            String password,
             String phoneNumber,
             String profileImageUrl
     ) {
@@ -116,6 +127,7 @@ public class User extends BaseEntity {
         this.socialType = socialType;
         this.point = 0;
         this.email = email;
+        this.password = password;
         this.phoneNumber = phoneNumber;
         this.profileImageUrl = profileImageUrl;
     }

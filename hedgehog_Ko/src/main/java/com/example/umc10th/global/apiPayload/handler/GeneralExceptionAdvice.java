@@ -35,7 +35,7 @@ public class GeneralExceptionAdvice {
             errors.put(error.getField(), error.getDefaultMessage());
         });
 
-        BaseErrorCode code = GeneralErrorCode.BAD_REQUEST;
+        BaseErrorCode code = GeneralErrorCode.VALIDATION_FAILED;
         return ResponseEntity.status(code.getStatus())
                 .body(ApiResponse.onFailure(code, errors));
     }

@@ -20,7 +20,7 @@ public interface TermControllerDocs {
             description = "약관 ID로 특정 약관의 상세 내용을 조회합니다."
     )
     ApiResponse<TermResDTO.TermDetailDTO> getTermDetail(
-            @Parameter(description = "상세 내용을 조회할 약관 ID", example = "1")
+            @Parameter(name = "termId", description = "상세 내용을 조회할 약관 ID", example = "1")
             Long termId
     );
 }

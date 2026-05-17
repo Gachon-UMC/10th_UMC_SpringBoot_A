@@ -22,19 +22,19 @@ public interface MissionControllerDocs {
             )
             MissionReqDTO.GetMyMissionsDTO request,
 
-            @Parameter(description = "조회할 지역 ID. 미입력 시 전체 지역 기준으로 조회합니다.", example = "1")
+            @Parameter(name = "regionId", description = "조회할 지역 ID. 미입력 시 전체 지역 기준으로 조회합니다.", example = "1")
             Long regionId,
 
-            @Parameter(description = "미션 상태. ASSIGNED, CHALLENGING, COMPLETED, EXPIRED, CANCELED 중 하나입니다.", example = "CHALLENGING")
+            @Parameter(name = "status", description = "미션 상태. ASSIGNED, CHALLENGING, COMPLETED, EXPIRED, CANCELED 중 하나입니다.", example = "CHALLENGING")
             MissionStatus status,
 
-            @Parameter(description = "한 페이지에 조회할 데이터 개수", example = "10")
+            @Parameter(name = "pageSize", description = "한 페이지에 조회할 데이터 개수", example = "10")
             Integer pageSize,
 
-            @Parameter(description = "0부터 시작하는 페이지 번호", example = "0")
+            @Parameter(name = "pageNumber", description = "0부터 시작하는 페이지 번호", example = "0")
             Integer pageNumber,
 
-            @Parameter(description = "정렬 조건. 예: id,desc 또는 deadline,asc", example = "id,desc")
+            @Parameter(name = "sort", description = "정렬 조건. 예: id,desc 또는 deadline,asc", example = "id,desc")
             String sort
     );
 
@@ -43,7 +43,7 @@ public interface MissionControllerDocs {
             description = "사용자에게 할당된 UserMission을 userMissionId로 조회하고 미션 상태를 도전 중으로 변경합니다."
     )
     ApiResponse<MissionResDTO.StartMissionResultDTO> startMission(
-            @Parameter(description = "도전을 시작할 사용자 미션 ID", example = "1")
+            @Parameter(name = "userMissionId", description = "도전을 시작할 사용자 미션 ID", example = "1")
             Long userMissionId
     );
 
@@ -52,7 +52,7 @@ public interface MissionControllerDocs {
             description = "사용자에게 할당된 UserMission을 userMissionId로 조회하고 미션 상태를 취소로 변경합니다."
     )
     ApiResponse<MissionResDTO.CancelMissionResultDTO> cancelMission(
-            @Parameter(description = "취소할 사용자 미션 ID", example = "1")
+            @Parameter(name = "userMissionId", description = "취소할 사용자 미션 ID", example = "1")
             Long userMissionId
     );
 
@@ -61,7 +61,7 @@ public interface MissionControllerDocs {
             description = "미션 수행 인증을 요청하고 사용자에게 인증에 필요한 정보를 반환합니다."
     )
     ApiResponse<MissionResDTO.VerificationRequestResultDTO> requestMissionVerification(
-            @Parameter(description = "인증을 요청할 사용자 미션 ID", example = "1")
+            @Parameter(name = "userMissionId", description = "인증을 요청할 사용자 미션 ID", example = "1")
             Long userMissionId
     );
 
@@ -70,7 +70,7 @@ public interface MissionControllerDocs {
             description = "사용자의 미션 인증을 확인하고 인증 성공 시 미션 완료 처리를 수행합니다."
     )
     ApiResponse<MissionResDTO.VerificationConfirmResultDTO> confirmMissionVerification(
-            @Parameter(description = "인증을 확인할 사용자 미션 ID", example = "1")
+            @Parameter(name = "userMissionId", description = "인증을 확인할 사용자 미션 ID", example = "1")
             Long userMissionId
     );
 }

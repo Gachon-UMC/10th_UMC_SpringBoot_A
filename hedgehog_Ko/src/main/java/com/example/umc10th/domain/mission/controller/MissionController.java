@@ -25,7 +25,7 @@ public class MissionController implements MissionControllerDocs {
     private final MissionService missionService;
 
     @Override
-    @PostMapping
+    @GetMapping
     public ApiResponse<MissionResDTO.MyMissionListDTO> getMyMissions(
             @Valid @RequestBody MissionReqDTO.GetMyMissionsDTO request,
             @RequestParam(required = false) Long regionId,

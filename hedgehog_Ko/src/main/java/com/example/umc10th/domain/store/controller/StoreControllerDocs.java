@@ -14,13 +14,13 @@ public interface StoreControllerDocs {
             description = "특정 지역의 가게 목록을 cursor 기반 페이지네이션으로 조회합니다. cursor를 생략하면 첫 페이지를 조회하고, 응답의 nextCursor는 다음 페이지 요청에 사용합니다. hasNext가 false이면 다음 페이지가 없으며, size는 한 번에 조회할 데이터 개수입니다."
     )
     ApiResponse<StoreResDTO.StoreListDTO> getStoreList(
-            @Parameter(description = "가게를 조회할 지역 ID", example = "1")
+            @Parameter(name = "regionId", description = "가게를 조회할 지역 ID", example = "1")
             Long regionId,
 
-            @Parameter(description = "다음 페이지 조회를 위한 cursor 값. 첫 조회 시 생략합니다.", example = "10")
+            @Parameter(name = "cursor", description = "다음 페이지 조회를 위한 cursor 값. 첫 조회 시 생략합니다.", example = "10")
             Long cursor,
 
-            @Parameter(description = "한 번에 조회할 가게 개수", example = "10")
+            @Parameter(name = "size", description = "한 번에 조회할 가게 개수", example = "10")
             Integer size
     );
 
@@ -29,7 +29,7 @@ public interface StoreControllerDocs {
             description = "가게 ID로 가게 기본 정보, 음식 카테고리, 평균 별점, 리뷰 수, 리뷰 미리보기 등을 조회합니다."
     )
     ApiResponse<StoreResDTO.StoreDetailDTO> getStoreDetail(
-            @Parameter(description = "상세 정보를 조회할 가게 ID", example = "1")
+            @Parameter(name = "storeId", description = "상세 정보를 조회할 가게 ID", example = "1")
             Long storeId
     );
 }

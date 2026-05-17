@@ -6,7 +6,7 @@ import com.example.umc10th.domain.user.entity.User;
 
 public class UserConverter {
 
-    public static User toUser(UserReqDTO.SignupDTO request) {
+    public static User toUser(UserReqDTO.SignupDTO request, String encodedPassword) {
         return User.builder()
                 .name(request.getName())
                 .nickname(request.getNickname())
@@ -17,6 +17,7 @@ public class UserConverter {
                 .socialUid(request.getSocialUid())
                 .socialType(request.getSocialType())
                 .email(request.getEmail())
+                .password(encodedPassword)
                 .phoneNumber(request.getPhoneNumber())
                 .profileImageUrl(request.getProfileImageUrl())
                 .build();

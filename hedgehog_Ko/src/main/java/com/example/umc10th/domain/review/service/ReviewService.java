@@ -19,7 +19,6 @@ import com.example.umc10th.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,19 +43,14 @@ public class ReviewService {
                 .orElseThrow(() -> new StoreException(StoreErrorCode.STORE_NOT_FOUND));
 
         int pageSize = getPageSize(size);
-        PageRequest pageRequest = PageRequest.of(0, pageSize + 1);
-
-        List<Review> reviews = reviewRepository.findStoreReviews(storeId, cursor, pageRequest);
-        boolean hasNext = reviews.size() > pageSize;
-
-        if (hasNext) {
-            reviews = reviews.subList(0, pageSize);
-        }
+        PageRequest pageRequest = PageRequest.of(0, pageSize);
+        Slice<Review> reviewSlice = reviewRepository.findStoreReviews(storeId, cursor, pageRequest);
+        List<Review> reviews = reviewSlice.getContent();
 
         return ReviewConverter.toStoreReviewListDTO(
                 reviews,
                 getNextCursor(reviews),
-                hasNext,
+                reviewSlice.hasNext(),
                 reviews.size()
         );
     }
@@ -92,8 +86,8 @@ public class ReviewService {
         }
 
         int pageSize = getPageSize(size);
-        PageRequest pageRequest = PageRequest.of(0, pageSize, getMyReviewSort(sort));
-        Slice<Review> reviewSlice = reviewRepository.findMyReviews(userId, cursor, pageRequest);
+        PageRequest pageRequest = PageRequest.of(0, pageSize);
+        Slice<Review> reviewSlice = getMyReviewSlice(userId, cursor, sort, pageRequest);
         List<Review> reviews = reviewSlice.getContent();
 
         return ReviewConverter.toMyReviewListDTO(
@@ -162,16 +156,18 @@ public class ReviewService {
         }
     }
 
-    private Sort getMyReviewSort(String sort) {
-        if (sort == null || sort.isBlank() || sort.equals("id")) {
-            return Sort.by(Sort.Direction.DESC, "id");
+    private Slice<Review> getMyReviewSlice(
+            Long userId,
+            Long cursor,
+            String sort,
+            PageRequest pageRequest
+    ) {
+        if (sort == null || sort.isBlank() || sort.equals("starRate")) {
+            return reviewRepository.findMyReviewsOrderByStarRate(userId, cursor, pageRequest);
         }
 
-        if (sort.equals("starRate")) {
-            return Sort.by(
-                    Sort.Order.desc("starRate"),
-                    Sort.Order.desc("id")
-            );
+        if (sort.equals("id")) {
+            return reviewRepository.findMyReviewsOrderById(userId, cursor, pageRequest);
         }
 
         throw new ReviewException(ReviewErrorCode.INVALID_REVIEW_SORT);

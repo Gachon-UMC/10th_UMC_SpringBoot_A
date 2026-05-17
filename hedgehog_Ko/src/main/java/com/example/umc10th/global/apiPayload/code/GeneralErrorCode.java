@@ -22,13 +22,17 @@ public enum GeneralErrorCode implements BaseErrorCode {
             "COMMON400_1",
             "잘못된 요청입니다."
     ),
+    VALIDATION_FAILED(HttpStatus.BAD_REQUEST,
+            "COMMON400_2",
+            "요청 값 검증에 실패했습니다."
+    ),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED,
             "COMMON401_1",
             "인증되지 않았습니다."
     ),
     FORBIDDEN(HttpStatus.FORBIDDEN,
             "COMMON403_1",
-            "접근이 금지되었습니다."
+            "접근 권한이 없습니다."
     ),
     NOT_FOUND(HttpStatus.NOT_FOUND,
             "COMMON404_1",
