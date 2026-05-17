@@ -66,6 +66,32 @@ public class User extends BaseEntity {
     @Column(name = "profile_image_url", length = 500)
     private String profileImageUrl;
 
+    /* 생성자 레벨의 `@Builder` 유지
+    클래스 레벨의 `@Builder`의 경우 필요한 인자만 설정할 수 없어 위험할 수 있기 때문.
+    그래서, 일반적으로 클래스 레벨에 `@Builder` 를 적용하는 것이 더 일반적이고 간편하지만,
+    복잡한 도메인 모델이나 염격한 객체 생성 규칙을 가진 경우에는 생성자 레벨에서의 적용이 더 적합
+
+    저는 단순 DTO나 데이터 모델의 경우에는 클래스 레벨의 `@Builder`를 사용하겠지만,
+    Entity의 경우에는 생성자 레벨의 `@Builder`를 유지하겠음.
+
+    출처:
+    https://velog.io/@ichubtou/Lombok-Builder-Class-vs-Constructor-Level
+    https://velog.io/@park2348190/Lombok-Builder%EC%9D%98-%EB%8F%99%EC%9E%91-%EC%9B%90%EB%A6%AC
+
+     - 이유:
+     1. id 속성이 `@GeneratedValue(strategy = GenerationType.IDENTITY)`이므로 외부에서 임의로 id를 넣는 경우 문제가 발생함.
+     2. 외부에서 point를 조작할 수 있음. 예를 들면,
+     ```Java
+     User.builder()
+        .id(1L)
+        .name("고슴이")
+        .point(999999)
+        .build();
+     ```
+     와 같이 공격할 수 있다고 함.
+
+     아래처럼 코드가 길지만... 생성자 레벨로 두겠습니다.
+    */
     @Builder
     private User(
             String name,

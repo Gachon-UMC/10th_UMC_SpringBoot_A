@@ -1,28 +1,40 @@
 package com.example.umc10th.domain.region.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import com.example.umc10th.global.entity.BaseEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "region")
-public class Region {
+@Table(
+        name = "region",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_region_name", columnNames = "region_name")
+        }
+)
+public class Region extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "region_id")
     private Long id;
 
-    @Column(name = "region_name", nullable = false, length = 50, unique = true)
-    private String regionName;
+    @Column(name = "region_name", nullable = false, length = 50)
+    private String name;
 
-    // 생성자 메소드 레벨의 `@Builder`
-    // 이유 1. setter를 막음으로 외부에서 값을 바꾸지 못하게 함.
-    // 이유 2. 대신 객체를 만들어야 할 때, Entity명.builder().필드1명().필드2명(). ... .build(); 처럼 사용하도록 함.
     @Builder
-    private Region(String regionName) {
-        this.regionName = regionName;
+    private Region(String name) {
+        this.name = name;
     }
 
 }

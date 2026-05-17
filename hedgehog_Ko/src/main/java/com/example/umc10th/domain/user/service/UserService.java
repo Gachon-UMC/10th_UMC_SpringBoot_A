@@ -18,10 +18,56 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    @Transactional
+    public UserResDTO.SignupResultDTO signup(UserReqDTO.SignupDTO request) {
+        User user = UserConverter.toUser(request);
+        User savedUser = userRepository.saveAndFlush(user);
+
+        return UserConverter.toSignupResultDTO(savedUser);
+    }
+
     public UserResDTO.MyInfoDTO getMyInfo(Long userId) {
         User user = userRepository.findByIdAndDeletedAtIsNull(userId)
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         return UserConverter.toMyInfoDTO(user);
+    }
+
+    @Transactional
+    public UserResDTO.UpdateMyInfoResultDTO updateMyInfo(
+            Long userId,
+            UserReqDTO.UpdateMyInfoDTO request
+    ) {
+        User user = getActiveUser(userId);
+        user.updateMyInfo(
+                request.nickname(),
+                request.address(),
+                request.detailAddress(),
+                request.profileImageUrl()
+        );
+
+        User savedUser = userRepository.saveAndFlush(user);
+
+        return UserConverter.toUpdateMyInfoResultDTO(savedUser);
+    }
+
+    @Transactional
+    public UserResDTO.DeleteUserResultDTO deleteMyAccount(Long userId) {
+        User user = getActiveUser(userId);
+        user.delete();
+
+        User savedUser = userRepository.saveAndFlush(user);
+
+        return UserConverter.toDeleteUserResultDTO(savedUser);
+    }
+
+    public UserResDTO.PointDTO getMyPoint(Long userId) {
+        User user = getActiveUser(userId);
+        return UserConverter.toPointDTO(user);
+    }
+
+    private User getActiveUser(Long userId) {
+        return userRepository.findByIdAndDeletedAtIsNull(userId)
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
     }
 }

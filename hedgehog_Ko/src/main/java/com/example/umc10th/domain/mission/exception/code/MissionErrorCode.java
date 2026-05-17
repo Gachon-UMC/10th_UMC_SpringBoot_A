@@ -43,7 +43,13 @@ public enum MissionErrorCode implements BaseErrorCode {
             "미션 성공 인증 요청이 필요합니다."),
     MISSION_VERIFICATION_EXPIRED(HttpStatus.BAD_REQUEST,
             "MISSION400_5",
-            "미션 성공 인증 시간이 만료되었습니다.");
+            "미션 성공 인증 시간이 만료되었습니다."),
+    INVALID_MISSION_PAGE(HttpStatus.BAD_REQUEST,
+            "MISSION400_6",
+            "페이지 값이 올바르지 않습니다."),
+    INVALID_MISSION_SORT(HttpStatus.BAD_REQUEST,
+            "MISSION400_7",
+            "정렬 값이 올바르지 않습니다.");
 
     private final HttpStatus status;
     private final String code;
