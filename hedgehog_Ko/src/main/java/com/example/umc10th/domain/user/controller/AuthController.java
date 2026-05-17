@@ -5,6 +5,7 @@ import com.example.umc10th.domain.user.dto.UserResDTO;
 import com.example.umc10th.domain.user.exception.code.UserSuccessCode;
 import com.example.umc10th.domain.user.service.UserService;
 import com.example.umc10th.global.apiPayload.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +21,7 @@ public class AuthController implements AuthControllerDocs {
 
     @Override
     @PostMapping("/signup")
-    public ApiResponse<UserResDTO.SignupResultDTO> signup(@RequestBody UserReqDTO.SignupDTO user) {
+    public ApiResponse<UserResDTO.SignupResultDTO> signup(@Valid @RequestBody UserReqDTO.SignupDTO user) {
         UserResDTO.SignupResultDTO response = userService.signup(user);
 
         return ApiResponse.onSuccess(UserSuccessCode.SIGNUP_SUCCESS, response);

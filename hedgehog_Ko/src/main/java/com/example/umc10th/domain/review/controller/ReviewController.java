@@ -54,7 +54,7 @@ public class ReviewController implements ReviewControllerDocs {
     public ApiResponse<ReviewResDTO.MyReviewListDTO> getMyReviews(
             @RequestParam(required = false) Long cursor,
             @RequestParam(defaultValue = "10") Integer size,
-            @RequestParam(defaultValue = "id") String sort
+            @RequestParam(defaultValue = "starRate") String sort
     ) {
         Long userId = 1L;
 
@@ -67,7 +67,7 @@ public class ReviewController implements ReviewControllerDocs {
     @PatchMapping("/users/me/reviews/{reviewId}")
     public ApiResponse<ReviewResDTO.UpdateReviewResultDTO> updateMyReview(
             @PathVariable Long reviewId,
-            @RequestBody ReviewReqDTO.UpdateReviewDTO request
+            @Valid @RequestBody ReviewReqDTO.UpdateReviewDTO request
     ) {
         Long userId = 1L;
 
