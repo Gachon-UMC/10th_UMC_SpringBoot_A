@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 public class MemberConverter {
 
-    public static User toUser(MemberRequestDTO.CreateDTO request) {
+    public static User toUser(MemberRequestDTO.CreateDTO request, String encodedPassword) {
         Gender gender = null;
         if (request.gender() != null) {
             gender = Gender.valueOf(request.gender().toUpperCase());
@@ -20,6 +20,7 @@ public class MemberConverter {
 
         return User.builder()
             .name(request.name())
+            .password(encodedPassword)
             .gender(gender)
             .birthday(request.birthday())
             .address(request.address())

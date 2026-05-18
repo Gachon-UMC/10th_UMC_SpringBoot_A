@@ -18,6 +18,7 @@ import com.example.umc10th.domain.member.repository.PreferredFoodRepository;
 import com.example.umc10th.domain.member.repository.ServiceAcceptanceRepository;
 import com.example.umc10th.domain.member.repository.TermRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,10 +34,11 @@ public class MemberService {
     private final ServiceAcceptanceRepository serviceAcceptanceRepository;
     private final NotificationSettingRepository notificationSettingRepository;
     private final NotificationRepository notificationRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public MemberResponseDTO.CreateResultDTO createMember(MemberRequestDTO.CreateDTO request) {
-        User newUser = MemberConverter.toUser(request);
+        User newUser = MemberConverter.toUser(request, passwordEncoder.encode(request.password()));
         User savedUser = memberRepository.save(newUser);
 
         if (request.preferred_food() != null) {
