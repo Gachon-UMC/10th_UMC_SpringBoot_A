@@ -52,7 +52,7 @@ public class MissionService {
                         .orElseThrow(() -> new MissionException(MissionErrorCode.REGION_NOT_FOUND))
                 : null;
 
-        Slice<UserMission> userMissionSlice = userMissionRepository.findByUserWithCursor(
+        Slice<UserMission> userMissionSlice = getUserMissionsByCondition(
                 user,
                 isCompleted,
                 location,
@@ -97,5 +97,39 @@ public class MissionService {
                 .orElseThrow(() -> new MissionException(MissionErrorCode.USER_MISSION_NOT_FOUND));
 
         userMission.complete();
+    }
+
+    private Slice<UserMission> getUserMissionsByCondition(
+            User user,
+            Boolean isCompleted,
+            Location location,
+            Long cursor,
+            PageRequest pageRequest
+    ) {
+        boolean hasIsCompleted = isCompleted != null;
+        boolean hasLocation = location != null;
+        boolean hasCursor = cursor != null;
+
+        if (!hasIsCompleted && !hasLocation) {
+            return hasCursor
+                    ? userMissionRepository.findByUserAndIdLessThanOrderByIdDesc(user, cursor, pageRequest)
+                    : userMissionRepository.findByUserOrderByIdDesc(user, pageRequest);
+        }
+
+        if (hasIsCompleted && !hasLocation) {
+            return hasCursor
+                    ? userMissionRepository.findByUserAndIsCompletedAndIdLessThanOrderByIdDesc(user, isCompleted, cursor, pageRequest)
+                    : userMissionRepository.findByUserAndIsCompletedOrderByIdDesc(user, isCompleted, pageRequest);
+        }
+
+        if (!hasIsCompleted) {
+            return hasCursor
+                    ? userMissionRepository.findByUserAndLocationAndIdLessThanOrderByIdDesc(user, location, cursor, pageRequest)
+                    : userMissionRepository.findByUserAndLocationOrderByIdDesc(user, location, pageRequest);
+        }
+
+        return hasCursor
+                ? userMissionRepository.findByUserAndIsCompletedAndLocationAndIdLessThanOrderByIdDesc(user, isCompleted, location, cursor, pageRequest)
+                : userMissionRepository.findByUserAndIsCompletedAndLocationOrderByIdDesc(user, isCompleted, location, pageRequest);
     }
 }

@@ -53,24 +53,33 @@ public class ReviewService {
 
         Slice<Review> reviewSlice;
         if (request.sort() == ReviewRequestDTO.ReviewSortType.RATING) {
-            Float cursorRate = null;
             if (request.cursor() != null) {
                 Review cursorReview = reviewRepository.findByIdAndUser(request.cursor(), user)
                         .orElseThrow(() -> new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
-                cursorRate = cursorReview.getRate();
+
+                reviewSlice = reviewRepository.findMyReviewsByRatingSortWithCursor(
+                        user,
+                        request.cursor(),
+                        cursorReview.getRate(),
+                        PageRequest.of(0, request.size())
+                );
+            } else {
+                reviewSlice = reviewRepository.findMyReviewsByRatingSort(
+                        user,
+                        PageRequest.of(0, request.size())
+                );
             }
-            reviewSlice = reviewRepository.findMyReviewsByRatingSort(
-                    user,
-                    request.cursor(),
-                    cursorRate,
-                    PageRequest.of(0, request.size())
-            );
         } else {
-            reviewSlice = reviewRepository.findMyReviewsByIdSort(
-                    user,
-                    request.cursor(),
-                    PageRequest.of(0, request.size())
-            );
+            reviewSlice = request.cursor() != null
+                    ? reviewRepository.findMyReviewsByIdSortWithCursor(
+                        user,
+                        request.cursor(),
+                        PageRequest.of(0, request.size())
+                    )
+                    : reviewRepository.findMyReviewsByIdSort(
+                        user,
+                        PageRequest.of(0, request.size())
+                    );
         }
 
         return ReviewConverter.toMyReviewListDTO(reviewSlice);
