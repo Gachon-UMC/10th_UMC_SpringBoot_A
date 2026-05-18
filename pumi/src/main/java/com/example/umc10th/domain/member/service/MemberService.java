@@ -38,6 +38,10 @@ public class MemberService {
 
     @Transactional
     public MemberResponseDTO.CreateResultDTO createMember(MemberRequestDTO.CreateDTO request) {
+        if (memberRepository.existsByEmail(request.email())) {
+            throw new MemberException(MemberErrorCode.MEMBER_EMAIL_ALREADY_EXISTS);
+        }
+
         User newUser = MemberConverter.toUser(request, passwordEncoder.encode(request.password()));
         User savedUser = memberRepository.save(newUser);
 

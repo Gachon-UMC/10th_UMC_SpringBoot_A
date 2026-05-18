@@ -2,13 +2,10 @@ package com.example.umc10th.domain.member.converter;
 
 import com.example.umc10th.domain.member.dto.MemberRequestDTO;
 import com.example.umc10th.domain.member.dto.MemberResponseDTO;
-import com.example.umc10th.domain.member.entity.Notification;
 import com.example.umc10th.domain.member.entity.User;
 import com.example.umc10th.domain.member.enums.Gender;
 import com.example.umc10th.domain.member.enums.MemberRole;
 import com.example.umc10th.domain.member.enums.MemberStatus;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class MemberConverter {
 
@@ -27,7 +24,7 @@ public class MemberConverter {
             .role(MemberRole.USER)
             .status(MemberStatus.ACTIVE)
             .point(0)
-            .email("temp@example.com")
+            .email(request.email())
             .build();
     }
 

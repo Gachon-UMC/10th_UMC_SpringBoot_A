@@ -4,12 +4,17 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Email;
 import java.time.LocalDate;
 import java.util.List;
 
 public class MemberRequestDTO {
 
     public record CreateDTO(
+        @NotBlank
+        @Email
+        @Size(max = 20)
+        String email,
         @NotBlank
         @Size(max = 20)
         String name,
