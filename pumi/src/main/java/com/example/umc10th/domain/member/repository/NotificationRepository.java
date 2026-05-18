@@ -9,8 +9,20 @@ import org.springframework.data.repository.query.Param;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-    @Query(value = "SELECT n FROM Notification n " +
-           "WHERE n.user.id = :userId AND (:cursor IS NULL OR n.id < :cursor) " +
+    @Query("SELECT n FROM Notification n " +
+           "WHERE n.user.id = :userId " +
            "ORDER BY n.id DESC")
-    Slice<Notification> findByUserIdWithCursor(@Param("userId") Long userId, @Param("cursor") Long cursor, Pageable pageable);
+    Slice<Notification> findByUserIdOrderByIdDesc(
+            @Param("userId") Long userId,
+            Pageable pageable
+    );
+
+    @Query("SELECT n FROM Notification n " +
+           "WHERE n.user.id = :userId AND n.id < :cursor " +
+           "ORDER BY n.id DESC")
+    Slice<Notification> findByUserIdAndIdLessThanOrderByIdDesc(
+            @Param("userId") Long userId,
+            @Param("cursor") Long cursor,
+            Pageable pageable
+    );
 }

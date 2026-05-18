@@ -1,0 +1,74 @@
+package com.example.umc10th.global.config;
+
+import com.example.umc10th.global.security.handler.CustomAccessDenied;
+import com.example.umc10th.global.security.handler.CustomEntryPoint;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+
+@EnableWebSecurity
+@Configuration
+public class SecurityConfig {
+
+    private final String[] docsAllowUris = {
+        "/swagger-ui.html",
+        "/swagger-ui/**",
+        "/swagger-resources/**",
+        "/v3/api-docs/**"
+    };
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(requests -> requests
+                .requestMatchers(docsAllowUris).permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/auth/users").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                .anyRequest().authenticated()
+            )
+            .exceptionHandling(exception -> exception
+                .authenticationEntryPoint(customEntryPoint())
+                .accessDeniedHandler(customAccessDenied())
+            )
+            .formLogin(form -> form
+                .defaultSuccessUrl("/swagger-ui/index.html", true)
+                .permitAll()
+            )
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout")
+                .permitAll()
+            );
+
+        return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CustomEntryPoint customEntryPoint() {
+        return new CustomEntryPoint();
+    }
+
+    @Bean
+    public CustomAccessDenied customAccessDenied() {
+        return new CustomAccessDenied();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+}

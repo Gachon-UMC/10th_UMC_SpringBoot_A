@@ -37,4 +37,10 @@ public class MemberResponseDTO {
         Long memberId,
         Integer totalPoints
     ) {}
+
+    public record LoginResultDTO(
+        Long memberId,
+        String email,
+        String role
+    ) {}
 }

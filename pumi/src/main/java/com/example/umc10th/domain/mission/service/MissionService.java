@@ -31,7 +31,6 @@ public class MissionService {
     private final MemberRepository memberRepository;
     private final LocationRepository locationRepository;
 
-    // 아래와 중복이 되긴 하지만.. 아래껄 수정하기에는 너무 멀리 와버렸다
     public MissionResponseDTO.OngoingMissionListDTO getOngoingMissions(Long userId, Integer page, Integer size) {
         User user = memberRepository.findById(userId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
@@ -46,14 +45,14 @@ public class MissionService {
 
     public MissionResponseDTO.MissionListDTO getUserMissions(Long userId, Boolean isCompleted, Long regionId, Long cursor) {
         User user = memberRepository.findById(userId)
-            .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
-        Location location = (regionId != null) ?
-                locationRepository.findById(regionId)
+        Location location = (regionId != null)
+                ? locationRepository.findById(regionId)
                         .orElseThrow(() -> new MissionException(MissionErrorCode.REGION_NOT_FOUND))
                 : null;
 
-        Slice<UserMission> userMissionSlice = userMissionRepository.findByUserWithCursor(
+        Slice<UserMission> userMissionSlice = getUserMissionsByCondition(
                 user,
                 isCompleted,
                 location,
@@ -66,38 +65,71 @@ public class MissionService {
 
     public MissionResponseDTO.MissionStatsDTO getMissionCountByRegion(Long userId, Long regionId) {
         User user = memberRepository.findById(userId)
-            .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         Location location = locationRepository.findById(regionId)
-            .orElseThrow(() -> new MissionException(MissionErrorCode.REGION_NOT_FOUND));
+                .orElseThrow(() -> new MissionException(MissionErrorCode.REGION_NOT_FOUND));
 
         Long count = userMissionRepository.countSuccessfulMissionsByUserAndRegion(user, location);
-
         return new MissionResponseDTO.MissionStatsDTO(location.getName(), count);
     }
 
     @Transactional
     public MissionResponseDTO.MissionChallengeResultDTO createMissionChallenge(Long userId, Long missionId) {
         User user = memberRepository.findById(userId)
-            .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
         Mission mission = missionRepository.findById(missionId)
-            .orElseThrow(() -> new MissionException(MissionErrorCode.MISSION_NOT_FOUND));
+                .orElseThrow(() -> new MissionException(MissionErrorCode.MISSION_NOT_FOUND));
 
         UserMission userMission = UserMission.builder()
-            .user(user)
-            .mission(mission)
-            .isCompleted(false)
-            .build();
+                .user(user)
+                .mission(mission)
+                .isCompleted(false)
+                .build();
 
         UserMission savedUserMission = userMissionRepository.save(userMission);
         return MissionConverter.toMissionChallengeResultDTO(savedUserMission);
     }
 
     @Transactional
-    public void updateMissionCompletion(Long userMissionId) {
-        UserMission userMission = userMissionRepository.findById(userMissionId)
-            .orElseThrow(() -> new MissionException(MissionErrorCode.USER_MISSION_NOT_FOUND));
-        
+    public void updateMissionCompletion(Long userId, Long userMissionId) {
+        UserMission userMission = userMissionRepository.findByIdAndUserId(userMissionId, userId)
+                .orElseThrow(() -> new MissionException(MissionErrorCode.USER_MISSION_NOT_FOUND));
+
         userMission.complete();
+    }
+
+    private Slice<UserMission> getUserMissionsByCondition(
+            User user,
+            Boolean isCompleted,
+            Location location,
+            Long cursor,
+            PageRequest pageRequest
+    ) {
+        boolean hasIsCompleted = isCompleted != null;
+        boolean hasLocation = location != null;
+        boolean hasCursor = cursor != null;
+
+        if (!hasIsCompleted && !hasLocation) {
+            return hasCursor
+                    ? userMissionRepository.findByUserAndIdLessThanOrderByIdDesc(user, cursor, pageRequest)
+                    : userMissionRepository.findByUserOrderByIdDesc(user, pageRequest);
+        }
+
+        if (hasIsCompleted && !hasLocation) {
+            return hasCursor
+                    ? userMissionRepository.findByUserAndIsCompletedAndIdLessThanOrderByIdDesc(user, isCompleted, cursor, pageRequest)
+                    : userMissionRepository.findByUserAndIsCompletedOrderByIdDesc(user, isCompleted, pageRequest);
+        }
+
+        if (!hasIsCompleted) {
+            return hasCursor
+                    ? userMissionRepository.findByUserAndLocationAndIdLessThanOrderByIdDesc(user, location, cursor, pageRequest)
+                    : userMissionRepository.findByUserAndLocationOrderByIdDesc(user, location, pageRequest);
+        }
+
+        return hasCursor
+                ? userMissionRepository.findByUserAndIsCompletedAndLocationAndIdLessThanOrderByIdDesc(user, isCompleted, location, cursor, pageRequest)
+                : userMissionRepository.findByUserAndIsCompletedAndLocationOrderByIdDesc(user, isCompleted, location, pageRequest);
     }
 }

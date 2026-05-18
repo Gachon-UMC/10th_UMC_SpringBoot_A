@@ -2,17 +2,14 @@ package com.example.umc10th.domain.member.converter;
 
 import com.example.umc10th.domain.member.dto.MemberRequestDTO;
 import com.example.umc10th.domain.member.dto.MemberResponseDTO;
-import com.example.umc10th.domain.member.entity.Notification;
 import com.example.umc10th.domain.member.entity.User;
 import com.example.umc10th.domain.member.enums.Gender;
 import com.example.umc10th.domain.member.enums.MemberRole;
 import com.example.umc10th.domain.member.enums.MemberStatus;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class MemberConverter {
 
-    public static User toUser(MemberRequestDTO.CreateDTO request) {
+    public static User toUser(MemberRequestDTO.CreateDTO request, String encodedPassword) {
         Gender gender = null;
         if (request.gender() != null) {
             gender = Gender.valueOf(request.gender().toUpperCase());
@@ -20,13 +17,14 @@ public class MemberConverter {
 
         return User.builder()
             .name(request.name())
+            .password(encodedPassword)
             .gender(gender)
             .birthday(request.birthday())
             .address(request.address())
             .role(MemberRole.USER)
             .status(MemberStatus.ACTIVE)
             .point(0)
-            .email("temp@example.com")
+            .email(request.email())
             .build();
     }
 
@@ -52,6 +50,14 @@ public class MemberConverter {
         return new MemberResponseDTO.PointInfoDTO(
             user.getId(),
             user.getPoint()
+        );
+    }
+
+    public static MemberResponseDTO.LoginResultDTO toLoginResultDTO(User user) {
+        return new MemberResponseDTO.LoginResultDTO(
+            user.getId(),
+            user.getEmail(),
+            user.getRole().name()
         );
     }
 }

@@ -13,27 +13,44 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     Optional<Review> findByIdAndUser(Long id, User user);
 
-    @Query(value =
-            "SELECT r " +
+    @Query("SELECT r " +
             "FROM Review r " +
             "JOIN FETCH r.store s " +
             "WHERE r.user = :user " +
-                "AND (:cursor IS NULL OR r.id < :cursor) " +
             "ORDER BY r.id DESC")
     Slice<Review> findMyReviewsByIdSort(
+            @Param("user") User user,
+            Pageable pageable
+    );
+
+    @Query("SELECT r " +
+            "FROM Review r " +
+            "JOIN FETCH r.store s " +
+            "WHERE r.user = :user AND r.id < :cursor " +
+            "ORDER BY r.id DESC")
+    Slice<Review> findMyReviewsByIdSortWithCursor(
             @Param("user") User user,
             @Param("cursor") Long cursor,
             Pageable pageable
     );
 
-    @Query(value =
-            "SELECT r " +
+    @Query("SELECT r " +
             "FROM Review r " +
             "JOIN FETCH r.store s " +
             "WHERE r.user = :user " +
-                "AND (:cursor IS NULL OR r.rate < :cursorRate OR (r.rate = :cursorRate AND r.id < :cursor)) " +
             "ORDER BY r.rate DESC, r.id DESC")
     Slice<Review> findMyReviewsByRatingSort(
+            @Param("user") User user,
+            Pageable pageable
+    );
+
+    @Query("SELECT r " +
+            "FROM Review r " +
+            "JOIN FETCH r.store s " +
+            "WHERE r.user = :user " +
+            "AND (r.rate < :cursorRate OR (r.rate = :cursorRate AND r.id < :cursor)) " +
+            "ORDER BY r.rate DESC, r.id DESC")
+    Slice<Review> findMyReviewsByRatingSortWithCursor(
             @Param("user") User user,
             @Param("cursor") Long cursor,
             @Param("cursorRate") Float cursorRate,

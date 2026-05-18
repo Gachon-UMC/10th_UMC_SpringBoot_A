@@ -15,9 +15,6 @@ public class ReviewRequestDTO {
 
     public record WriteReviewDTO(
         @NotNull
-        @Min(1)
-        Long userId,
-        @NotNull
         @Min(0)
         @Max(5)
         Float rate,
@@ -27,9 +24,6 @@ public class ReviewRequestDTO {
     ) {}
 
     public record MyReviewsRequestDTO(
-        @NotNull
-        @Min(1)
-        Long userId,
         @Min(1)
         Long cursor,
         @NotNull
