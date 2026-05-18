@@ -11,6 +11,7 @@ import com.umc10th.umc10th_kamang.domain.review.converter.ReviewConverter;
 import com.umc10th.umc10th_kamang.domain.review.dto.ReviewRequest;
 import com.umc10th.umc10th_kamang.domain.review.dto.ReviewResponse;
 import com.umc10th.umc10th_kamang.domain.review.entity.Review;
+import com.umc10th.umc10th_kamang.domain.review.enums.ReviewSortType;
 import com.umc10th.umc10th_kamang.domain.review.exception.ReviewErrorCode;
 import com.umc10th.umc10th_kamang.domain.review.exception.ReviewException;
 import com.umc10th.umc10th_kamang.domain.review.repository.ReviewRepository;
@@ -31,8 +32,8 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class ReviewService {
 
-    private static final BigDecimal MIN_SCORE = new BigDecimal("1.0");
-    private static final BigDecimal MAX_SCORE = new BigDecimal("5.0");
+    // 커서 기반 페이지네이션 기본 조회 개수
+    private static final int DEFAULT_SIZE = 10;
 
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
@@ -45,8 +46,6 @@ public class ReviewService {
             Long storeId,
             ReviewRequest.CreateDTO request
     ) {
-        validateScore(request.getScore());
-
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
@@ -61,10 +60,64 @@ public class ReviewService {
         return ReviewConverter.toCreateResultDTO(savedReview);
     }
 
-    private void validateScore(BigDecimal score) {
-        if (score == null || score.compareTo(MIN_SCORE) < 0 || score.compareTo(MAX_SCORE) > 0) {
-            throw new ReviewException(ReviewErrorCode.INVALID_SCORE);
+    public ReviewResponse.MyReviewListDTO getMyReviews(
+            Long userId,
+            String sortBy,
+            Long cursorId,
+            BigDecimal cursorScore,
+            Integer size
+    ) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+
+        ReviewSortType sortType = parseSortType(sortBy);
+        validateCursor(sortType, cursorId, cursorScore);
+
+        int resolvedSize = size == null ? DEFAULT_SIZE : size;
+        // 다음 페이지 존재 여부를 확인하기 위해 요청 개수보다 1개 더 조회합니다.
+        int querySize = resolvedSize + 1;
+
+        List<Review> fetchedReviews = findMyReviews(userId, sortType, cursorId, cursorScore, querySize);
+        boolean hasNext = fetchedReviews.size() > resolvedSize;
+        List<Review> reviews = hasNext ? fetchedReviews.subList(0, resolvedSize) : fetchedReviews;
+
+        return ReviewConverter.toMyReviewListDTO(reviews, hasNext, sortType == ReviewSortType.SCORE);
+    }
+
+    private ReviewSortType parseSortType(String sortBy) {
+        try {
+            return ReviewSortType.valueOf(sortBy);
+        } catch (IllegalArgumentException | NullPointerException e) {
+            throw new ReviewException(ReviewErrorCode.REVIEW_SORT_INVALID);
         }
+    }
+
+    private void validateCursor(ReviewSortType sortType, Long cursorId, BigDecimal cursorScore) {
+        // ID 정렬은 reviewId만으로 다음 페이지 위치를 판단합니다.
+        if (sortType == ReviewSortType.ID && cursorScore != null) {
+            throw new ReviewException(ReviewErrorCode.REVIEW_CURSOR_INVALID);
+        }
+
+        // 별점 정렬은 같은 별점 내 순서를 보장하기 위해 score와 reviewId를 함께 사용합니다.
+        if (sortType == ReviewSortType.SCORE && ((cursorId == null) != (cursorScore == null))) {
+            throw new ReviewException(ReviewErrorCode.REVIEW_CURSOR_INVALID);
+        }
+    }
+
+    private List<Review> findMyReviews(
+            Long userId,
+            ReviewSortType sortType,
+            Long cursorId,
+            BigDecimal cursorScore,
+            int querySize
+    ) {
+        PageRequest pageRequest = PageRequest.of(0, querySize);
+
+        if (sortType == ReviewSortType.ID) {
+            return reviewRepository.findMyReviewsOrderByIdDesc(userId, cursorId, pageRequest);
+        }
+
+        return reviewRepository.findMyReviewsOrderByScoreDesc(userId, cursorScore, cursorId, pageRequest);
     }
 
     private UserMission findReviewableCompletedMission(Long userId, Long storeId) {

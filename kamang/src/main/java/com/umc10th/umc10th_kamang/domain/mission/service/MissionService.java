@@ -32,6 +32,9 @@ public class MissionService {
 
     private static final int MISSION_GOAL_COUNT = 10;
     private static final int GOAL_REWARD_POINTS = 1000;
+    // page, size가 요청에 없을 때 사용할 기본 페이징 값
+    private static final int DEFAULT_PAGE = 0;
+    private static final int DEFAULT_SIZE = 10;
 
     private final UserRepository userRepository;
     private final RegionRepository regionRepository;
@@ -83,10 +86,13 @@ public class MissionService {
         MissionStatus missionStatus = parseMissionStatus(status);
         validateListStatus(missionStatus);
 
+        int resolvedPage = page == null ? DEFAULT_PAGE : page;
+        int resolvedSize = size == null ? DEFAULT_SIZE : size;
+
         Page<UserMission> userMissions = userMissionRepository.findUserMissionsByUserAndStatus(
                 userId,
                 missionStatus,
-                PageRequest.of(page, size)
+                PageRequest.of(resolvedPage, resolvedSize)
         );
 
         return MissionConverter.toMissionListDTO(userMissions);

@@ -1,5 +1,6 @@
 package com.umc10th.umc10th_kamang.domain.mission.controller;
 
+import com.umc10th.umc10th_kamang.domain.mission.dto.MissionRequest;
 import com.umc10th.umc10th_kamang.domain.mission.dto.MissionResponse;
 import com.umc10th.umc10th_kamang.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,15 +26,8 @@ public interface MissionApi {
 
     @Operation(
             summary = "내 미션 목록 조회",
-            description = "사용자의 진행중 또는 진행완료 미션 목록을 페이징 조회합니다. status는 PROCEEDING 또는 COMPLETED만 허용합니다."
+            description = "Request Body로 사용자 ID, 상태, 페이지 정보를 전달해 진행중 또는 진행완료 미션 목록을 오프셋 기반 페이지네이션으로 조회합니다. status는 PROCEEDING 또는 COMPLETED만 허용합니다."
     )
     ApiResponse<MissionResponse.MissionListDTO> getUserMissions(
-            @Parameter(name = "userId", description = "임시 사용자 ID", example = "1", required = true)
-            Long userId,
-            @Parameter(name = "status", description = "미션 상태 필터", example = "PROCEEDING", required = true)
-            String status,
-            @Parameter(name = "page", description = "페이지 번호", example = "0")
-            Integer page,
-            @Parameter(name = "size", description = "페이지 크기", example = "10")
-            Integer size);
+            MissionRequest.MyMissionListDTO request);
 }
