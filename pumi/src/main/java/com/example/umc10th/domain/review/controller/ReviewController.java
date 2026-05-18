@@ -6,8 +6,10 @@ import com.example.umc10th.domain.review.exception.code.ReviewSuccessCode;
 import com.example.umc10th.domain.review.service.ReviewService;
 import com.example.umc10th.global.apiPayload.Response;
 import com.example.umc10th.global.apiPayload.code.BaseSuccessCode;
+import com.example.umc10th.global.security.entity.AuthMember;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,18 +21,20 @@ public class ReviewController {
 
     @PostMapping("/missions/{userMissionId}")
     public Response<ReviewResponseDTO.ReviewResultDTO> createReview(
+        @AuthenticationPrincipal AuthMember authMember,
         @PathVariable Long userMissionId,
         @Valid @RequestBody ReviewRequestDTO.WriteReviewDTO request
     ) {
         BaseSuccessCode code = ReviewSuccessCode.OK;
-        return Response.onSuccess(code, reviewService.createReview(userMissionId, request));
+        return Response.onSuccess(code, reviewService.createReview(authMember.getUserId(), userMissionId, request));
     }
 
     @PostMapping("/me")
     public Response<ReviewResponseDTO.MyReviewListDTO> getMyReviews(
+            @AuthenticationPrincipal AuthMember authMember,
             @Valid @RequestBody ReviewRequestDTO.MyReviewsRequestDTO request
     ) {
         BaseSuccessCode code = ReviewSuccessCode.OK;
-        return Response.onSuccess(code, reviewService.getMyReviews(request));
+        return Response.onSuccess(code, reviewService.getMyReviews(authMember.getUserId(), request));
     }
 }

@@ -52,4 +52,12 @@ public class MemberConverter {
             user.getPoint()
         );
     }
+
+    public static MemberResponseDTO.LoginResultDTO toLoginResultDTO(User user) {
+        return new MemberResponseDTO.LoginResultDTO(
+            user.getId(),
+            user.getEmail(),
+            user.getRole().name()
+        );
+    }
 }

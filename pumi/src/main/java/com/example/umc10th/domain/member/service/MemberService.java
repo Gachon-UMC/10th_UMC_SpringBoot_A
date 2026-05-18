@@ -17,8 +17,19 @@ import com.example.umc10th.domain.member.repository.NotificationSettingRepositor
 import com.example.umc10th.domain.member.repository.PreferredFoodRepository;
 import com.example.umc10th.domain.member.repository.ServiceAcceptanceRepository;
 import com.example.umc10th.domain.member.repository.TermRepository;
+import com.example.umc10th.global.security.entity.AuthMember;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +46,7 @@ public class MemberService {
     private final NotificationSettingRepository notificationSettingRepository;
     private final NotificationRepository notificationRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     @Transactional
     public MemberResponseDTO.CreateResultDTO createMember(MemberRequestDTO.CreateDTO request) {
@@ -82,5 +94,28 @@ public class MemberService {
         User user = memberRepository.findById(userId)
             .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
         return MemberConverter.toPointInfoDTO(user);
+    }
+
+    @Transactional
+    public MemberResponseDTO.LoginResultDTO login(MemberRequestDTO.LoginDTO request, HttpServletRequest httpServletRequest) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.email(), request.password())
+            );
+
+            SecurityContext context = SecurityContextHolder.createEmptyContext();
+            context.setAuthentication(authentication);
+            SecurityContextHolder.setContext(context);
+
+            HttpSession session = httpServletRequest.getSession(true);
+            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, context);
+
+            AuthMember authMember = (AuthMember) authentication.getPrincipal();
+            return MemberConverter.toLoginResultDTO(authMember.getUser());
+        } catch (BadCredentialsException e) {
+            throw new MemberException(MemberErrorCode.MEMBER_LOGIN_FAILED);
+        } catch (AuthenticationException e) {
+            throw new MemberException(MemberErrorCode.MEMBER_LOGIN_FAILED);
+        }
     }
 }

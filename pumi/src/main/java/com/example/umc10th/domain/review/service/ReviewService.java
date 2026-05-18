@@ -31,11 +31,10 @@ public class ReviewService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public ReviewResponseDTO.ReviewResultDTO createReview(Long userMissionId, ReviewRequestDTO.WriteReviewDTO request) {
-        User user = memberRepository.findById(request.userId())
-                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
-        UserMission userMission = userMissionRepository.findById(userMissionId)
+    public ReviewResponseDTO.ReviewResultDTO createReview(Long userId, Long userMissionId, ReviewRequestDTO.WriteReviewDTO request) {
+        UserMission userMission = userMissionRepository.findByIdAndUserId(userMissionId, userId)
             .orElseThrow(() -> new MissionException(MissionErrorCode.USER_MISSION_NOT_FOUND));
+        User user = userMission.getUser();
 
         Review review = ReviewConverter.toReview(
             request, 
@@ -48,8 +47,8 @@ public class ReviewService {
         return ReviewConverter.toReviewResultDTO(savedReview);
     }
 
-    public ReviewResponseDTO.MyReviewListDTO getMyReviews(ReviewRequestDTO.MyReviewsRequestDTO request) {
-        User user = memberRepository.findById(request.userId())
+    public ReviewResponseDTO.MyReviewListDTO getMyReviews(Long userId, ReviewRequestDTO.MyReviewsRequestDTO request) {
+        User user = memberRepository.findById(userId)
                 .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
         Slice<Review> reviewSlice;
