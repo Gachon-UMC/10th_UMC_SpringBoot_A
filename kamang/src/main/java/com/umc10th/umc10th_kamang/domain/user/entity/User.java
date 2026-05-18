@@ -51,6 +51,9 @@ public class User extends BaseTimeEntity {
     @Column(name = "email", length = 100)
     private String email;
 
+    @Column(name = "password", length = 255)
+    private String password;
+
     @Column(name = "phone_number", length = 15)
     private String phoneNumber;
 
