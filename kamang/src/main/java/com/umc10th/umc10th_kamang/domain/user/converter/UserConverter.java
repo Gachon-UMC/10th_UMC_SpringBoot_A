@@ -8,6 +8,13 @@ public class UserConverter {
     private UserConverter() {
     }
 
+    public static UserResponse.SignupResultDTO toSignupResultDTO(User user) {
+        return UserResponse.SignupResultDTO.builder()
+                .userId(user.getId())
+                .createdAt(user.getCreatedAt())
+                .build();
+    }
+
     public static UserResponse.MyPageDTO toMyPageDTO(User user) {
         return UserResponse.MyPageDTO.builder()
                 .userId(user.getId())

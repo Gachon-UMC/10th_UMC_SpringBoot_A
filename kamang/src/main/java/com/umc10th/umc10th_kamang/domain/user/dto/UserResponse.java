@@ -18,8 +18,12 @@ public class UserResponse {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @Schema(description = "회원가입 결과 응답")
     public static class SignupResultDTO {
+        @Schema(description = "생성된 사용자 ID", example = "1")
         private Long userId;
+
+        @Schema(description = "회원가입 처리 시각", example = "2026-05-19T02:10:00")
         private LocalDateTime createdAt;
     }
 
@@ -31,7 +35,9 @@ public class UserResponse {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @Schema(description = "약관 목록 조회 응답")
     public static class TermsListDTO {
+        @Schema(description = "약관 목록")
         private List<TermDTO> terms;
     }
 
@@ -42,10 +48,18 @@ public class UserResponse {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @Schema(description = "약관 항목")
     public static class TermDTO {
+        @Schema(description = "약관 ID", example = "1")
         private Long termId;
+
+        @Schema(description = "약관 제목", example = "서비스 이용약관")
         private String title;
+
+        @Schema(description = "약관 내용", example = "서비스 이용을 위한 약관 내용입니다.")
         private String content;
+
+        @Schema(description = "필수 약관 여부", example = "true")
         private Boolean isRequired;
     }
 

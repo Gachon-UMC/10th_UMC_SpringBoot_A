@@ -4,6 +4,7 @@ import com.umc10th.umc10th_kamang.domain.user.dto.UserRequest;
 import com.umc10th.umc10th_kamang.domain.user.dto.UserResponse;
 import com.umc10th.umc10th_kamang.domain.user.service.UserService;
 import com.umc10th.umc10th_kamang.global.apiPayload.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +24,6 @@ public class UserController implements UserApi {
      */
     @GetMapping("/api/auth/terms")
     public ApiResponse<UserResponse.TermsListDTO> getTerms() {
-        // TODO: 다음 주차에서 Service 연결 예정
         return ApiResponse.onSuccess(null);
     }
 
@@ -32,9 +32,8 @@ public class UserController implements UserApi {
      * POST /api/auth/signup
      */
     @PostMapping("/api/auth/signup")
-    public ApiResponse<UserResponse.SignupResultDTO> signup(@RequestBody UserRequest.SignupDTO request) {
-        // TODO: 다음 주차에서 Service 연결 예정
-        return ApiResponse.onSuccess(null);
+    public ApiResponse<UserResponse.SignupResultDTO> signup(@Valid @RequestBody UserRequest.SignupDTO request) {
+        return ApiResponse.onSuccess(userService.signup(request));
     }
 
     /**
