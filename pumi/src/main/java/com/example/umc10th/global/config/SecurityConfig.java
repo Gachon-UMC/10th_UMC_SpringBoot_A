@@ -4,6 +4,7 @@ import com.example.umc10th.global.security.handler.CustomAccessDenied;
 import com.example.umc10th.global.security.handler.CustomEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -15,12 +16,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    private final String[] allowUris = {
+    private final String[] docsAllowUris = {
         "/swagger-ui/**",
         "/swagger-resources/**",
-        "/v3/api-docs/**",
-        "/api/auth/**",
-        "/auth/**"
+        "/v3/api-docs/**"
     };
 
     @Bean
@@ -28,7 +27,8 @@ public class SecurityConfig {
         http
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(requests -> requests
-                .requestMatchers(allowUris).permitAll()
+                .requestMatchers(docsAllowUris).permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/auth/users").permitAll()
                 .anyRequest().authenticated()
             )
             .exceptionHandling(exception -> exception
