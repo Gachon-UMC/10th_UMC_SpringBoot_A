@@ -5,6 +5,7 @@ import com.example.umc10th.domain.mission.entity.Mission;
 import com.example.umc10th.domain.mission.entity.mapping.UserMission;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 
 public class MissionConverter {
@@ -52,6 +53,21 @@ public class MissionConverter {
         Long nextCursor = content.isEmpty() ? null : content.get(content.size() - 1).getId();
 
         return new MissionResponseDTO.MissionListDTO(previewDTOs, nextCursor);
+    }
+
+    public static MissionResponseDTO.OngoingMissionListDTO toOngoingMissionListDTO(Page<UserMission> ongoingMissions) {
+        List<MissionResponseDTO.MissionPreviewDTO> previewDTOs = ongoingMissions.getContent().stream()
+                .map(MissionConverter::toMissionPreviewDTO)
+                .collect(Collectors.toList());
+
+        return new MissionResponseDTO.OngoingMissionListDTO(
+                previewDTOs,
+                previewDTOs.size(),
+                ongoingMissions.getTotalPages(),
+                ongoingMissions.getTotalElements(),
+                ongoingMissions.isFirst(),
+                ongoingMissions.isLast()
+        );
     }
 
     public static MissionResponseDTO.MissionChallengeResultDTO toMissionChallengeResultDTO(UserMission userMission) {

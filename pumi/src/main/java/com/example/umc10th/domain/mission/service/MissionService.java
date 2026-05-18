@@ -15,6 +15,7 @@ import com.example.umc10th.domain.mission.repository.LocationRepository;
 import com.example.umc10th.domain.mission.repository.MissionRepository;
 import com.example.umc10th.domain.mission.repository.UserMissionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,19 @@ public class MissionService {
     private final UserMissionRepository userMissionRepository;
     private final MemberRepository memberRepository;
     private final LocationRepository locationRepository;
+
+    // 아래와 중복이 되긴 하지만.. 아래껄 수정하기에는 너무 멀리 와버렸다
+    public MissionResponseDTO.OngoingMissionListDTO getOngoingMissions(Long userId, Integer page, Integer size) {
+        User user = memberRepository.findById(userId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+        Page<UserMission> ongoingMissions = userMissionRepository.findOngoingMissionsByUser(
+                user,
+                PageRequest.of(page, size)
+        );
+
+        return MissionConverter.toOngoingMissionListDTO(ongoingMissions);
+    }
 
     public MissionResponseDTO.MissionListDTO getUserMissions(Long userId, Boolean isCompleted, Long regionId, Long cursor) {
         User user = memberRepository.findById(userId)
