@@ -24,4 +24,12 @@ public class UserTerm extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "term_id")
     private Term term;
+
+    public void setMapping(User user) {
+        if (this.user != null) {
+            this.user.getUserTermList().remove(this);
+        }
+        this.user = user;
+        user.getUserTermList().add(this);
+    }
 }

@@ -40,8 +40,14 @@ public class UserReqDTO {
         @NotBlank
         private String email;
 
+        @NotBlank
+        private String password;
+
         @NotNull
         @Size(min = 1)
         private List<Long> preferCategory;
+
+        @NotNull
+        private List<Long> memberTerms;
     }
 }
