@@ -23,12 +23,16 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="member")
+@Table(name="`member`")
 public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name="password", nullable = false)
+    private String password;
+
 
     @Column(name="name", nullable = false)
     private String name;
@@ -40,7 +44,7 @@ public class Member extends BaseEntity {
     @Column(name="birth", nullable = false)
     private LocalDate birth;
 
-    @Column(name = "address", nullable = false)
+    @Column(name = "address")
     @Enumerated(EnumType.STRING)
     private Address address;
 
@@ -57,19 +61,19 @@ public class Member extends BaseEntity {
     private Integer totalPoint;
 
 
-    @Column(name = "social_uid", nullable = false)
+    @Column(name = "social_uid")
     private String socialUid;
 
-    @Column(name="social_type", nullable = false)
+    @Column(name="social_type")
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
-    @OneToMany
+    @OneToMany(mappedBy = "member")
     private List<MemberMission> memberMissionList = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "member")
     private List<MemberFood> memberFoodList = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "member")
     private List<MemberTerm> memberTermList = new ArrayList<>();
 }

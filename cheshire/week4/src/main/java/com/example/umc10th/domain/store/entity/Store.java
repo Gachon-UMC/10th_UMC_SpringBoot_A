@@ -34,7 +34,7 @@ public class Store {
 
 //    식당 카테고리
     @Column(name = "store_category", nullable = false)
-    private FoodName storeCategory; // FoodName이랑 카테고리 차이가 없을 것 같아서
+    private FoodName storeCategory;
 
 //    식당 상세주소
     @Column(name = "store_address", nullable = false)

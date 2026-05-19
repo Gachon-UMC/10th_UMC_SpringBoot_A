@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class ReviewController {
     private final ReviewService reviewService;
 
@@ -26,7 +27,7 @@ public class ReviewController {
         return ApiResponse.onSuccess(ReviewSuccessCode.REVIEW_REGISTER_CREATED, "리뷰 작성 성공!");
     }
 
-    @GetMapping("/my/reivews")
+    @GetMapping("/my/reviews")
     public ApiResponse<?> getMyReviews(
             @RequestBody  Long memberId,
             @RequestParam(required = false) Long cursor,

@@ -16,15 +16,18 @@ public class MissionResDTO {
             Integer totalPoint,
             Integer completedMissionCount,
             List<MissionInfo> missions
-    ) {}
+    ) {
+    }
+
     public record MissionInfo(
-                String storeName,
-                FoodName storeCategory,
-                String content,
-                LocalDate dueDate,
-                Integer point,
-                MissionStatus status
-    ) {}
+            String storeName,
+            FoodName storeCategory,
+            String content,
+            LocalDate dueDate,
+            Integer point,
+            MissionStatus status
+    ) {
+    }
 
     public enum MissionStatus {
         IN_PROGRESS,
@@ -37,9 +40,10 @@ public class MissionResDTO {
             Long missionId,
             Integer point,
             String content
-    ){}
+    ) {
+    }
 
-//   페이지네이션 틀
+    //   페이지네이션 틀
     @Builder
     public record Pagination<T>(
             List<T> data,
