@@ -20,7 +20,7 @@ public class AuthConverter {
                 .birth(dto.birth())
                 .address(dto.address())
                 .detailAddress(dto.detailAddress())
-                .socialType(SocialType.LOCAL)
+                .socialType(SocialType.KAKAO)
                 .socialId("")
                 .point(0)
                 .build();
