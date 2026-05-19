@@ -12,13 +12,6 @@ public class AuthResDTO {
     ) {}
 
     @Builder
-    public record Login(
-            Long memberId,
-            String accessToken,
-            String refreshToken
-    ) {}
-
-    @Builder
     public record Preference(
             Long memberId,
             Integer registeredCount

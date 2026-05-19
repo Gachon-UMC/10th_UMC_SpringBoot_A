@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 public enum AuthSuccessCode implements BaseSuccessCode {
 
     SIGNUP_OK(HttpStatus.CREATED, "AUTH201_1", "회원가입에 성공했습니다."),
-    LOGIN_OK(HttpStatus.OK, "AUTH200_1", "로그인에 성공했습니다."),
     PREFERENCE_OK(HttpStatus.OK, "AUTH200_2", "선호 카테고리가 등록되었습니다."),
     TERMS_OK(HttpStatus.OK, "AUTH200_3", "약관 동의가 처리되었습니다."),
     ;
