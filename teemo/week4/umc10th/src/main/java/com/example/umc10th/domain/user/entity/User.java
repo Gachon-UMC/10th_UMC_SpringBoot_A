@@ -48,7 +48,7 @@ public class User extends BaseEntity {
     @Column(nullable = false, length = 40)
     private String detailAddress;
 
-    @Column(nullable = false, length = 50)
+    @Column(length = 50)
     private String socialUid;
 
     @Enumerated(EnumType.STRING)
@@ -61,6 +61,9 @@ public class User extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String email;
 
+    @Column(nullable = false)
+    private String password;
+
     @Column(length = 15)
     private String phoneNumber;
 
@@ -68,6 +71,10 @@ public class User extends BaseEntity {
     private String profileUrl;
 
     private LocalDateTime deletedAt;
+
+    public void encodePassword(String password) {
+        this.password = password;
+    }
 
     @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

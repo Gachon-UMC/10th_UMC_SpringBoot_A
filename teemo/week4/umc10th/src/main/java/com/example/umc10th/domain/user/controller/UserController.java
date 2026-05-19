@@ -39,7 +39,7 @@ public class UserController {
     @PostMapping("/auth/signup")
     @Operation(summary = "회원가입 API", description = "회원가입을 진행하는 API입니다.")
     public ApiResponse<UserResDTO.JoinResult> join(@RequestBody @Valid UserReqDTO.Join request) {
-        return ApiResponse.of(UserSuccessCode.JOIN_SUCCESS, null);
+        return ApiResponse.of(UserSuccessCode.JOIN_SUCCESS, userService.joinUser(request));
     }
 
     @GetMapping("/users/{userId}/missions")
