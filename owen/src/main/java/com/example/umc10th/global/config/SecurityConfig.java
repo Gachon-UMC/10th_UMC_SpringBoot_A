@@ -24,7 +24,9 @@ public class SecurityConfig {
             "/swagger-resources/**",
             "/v3/api-docs/**",
             // 8주차 미션: 회원가입 API만 Public API
-            "/auth/signup"
+            "/auth/signup",
+            // Spring Security 폼 로그인 화면
+            "/login"
     };
 
     @Bean
