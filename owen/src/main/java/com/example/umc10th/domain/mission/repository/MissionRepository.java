@@ -10,15 +10,21 @@ import org.springframework.data.repository.query.Param;
 
 public interface MissionRepository extends JpaRepository<Mission, Long> {
 
+    // 이미 도전한 미션을 NOT EXISTS로 제외
     @Query("SELECT m FROM Mission m " +
             "JOIN m.store s " +
             "JOIN s.location l " +
             "WHERE l.name = :address " +
             "AND m.deletedAt IS NULL " +
             "AND m.deadline >= CURRENT_DATE " +
+            "AND NOT EXISTS (" +
+            "    SELECT mm FROM MemberMission mm " +
+            "    WHERE mm.mission = m AND mm.member.id = :memberId" +
+            ") " +
             "ORDER BY m.createdAt DESC")
     Page<Mission> findAvailableMissionsByRegion(
             @Param("address") Address address,
+            @Param("memberId") Long memberId,
             Pageable pageable
     );
 }

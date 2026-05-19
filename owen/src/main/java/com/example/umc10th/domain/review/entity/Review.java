@@ -1,16 +1,16 @@
 package com.example.umc10th.domain.review.entity;
 
 import com.example.umc10th.domain.member.entity.Member;
-import com.example.umc10th.domain.store.entity.Store;  // ← 변경
+import com.example.umc10th.domain.store.entity.Store;
+import com.example.umc10th.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
 
 @Entity @Table(name = "review")
 @Getter @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Review {
+public class Review extends BaseEntity {  // BaseEntity 상속
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
     private Long id;
@@ -18,8 +18,7 @@ public class Review {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    // createdAt 필드 삭제 — BaseEntity가 관리
 
     @Column(nullable = false)
     private Float star;
@@ -32,7 +31,5 @@ public class Review {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reply_id")
-    private Reply reply;
+    // reply FK 제거 (10번 반영) — Reply 쪽에서 review_id FK를 관리
 }
