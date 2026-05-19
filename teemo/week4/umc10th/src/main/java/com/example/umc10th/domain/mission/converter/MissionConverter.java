@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 
 public class MissionConverter {
 
-    public static MissionResDTO.MissionPreviewDTO toMissionPreviewDTO(UserMission userMission) {
-        return MissionResDTO.MissionPreviewDTO.builder()
+    public static MissionResDTO.MissionPreview toMissionPreview(UserMission userMission) {
+        return MissionResDTO.MissionPreview.builder()
                 .missionId(userMission.getMission().getId())
                 .storeName(userMission.getMission().getStore().getName())
                 .missionSpec(userMission.getMission().getConditional())
@@ -20,8 +20,8 @@ public class MissionConverter {
                 .build();
     }
 
-    public static MissionResDTO.MissionPreviewDTO toMissionPreviewDTO(Mission mission) {
-        return MissionResDTO.MissionPreviewDTO.builder()
+    public static MissionResDTO.MissionPreview toMissionPreview(Mission mission) {
+        return MissionResDTO.MissionPreview.builder()
                 .missionId(mission.getId())
                 .storeName(mission.getStore().getName())
                 .missionSpec(mission.getConditional())
@@ -31,12 +31,12 @@ public class MissionConverter {
                 .build();
     }
 
-    public static MissionResDTO.MissionPreviewListDTO toMissionPreviewListDTO(Page<UserMission> userMissionPage) {
-        List<MissionResDTO.MissionPreviewDTO> missionPreviewDTOList = userMissionPage.getContent().stream()
-                .map(MissionConverter::toMissionPreviewDTO)
+    public static MissionResDTO.MissionPreviewList toMissionPreviewList(Page<UserMission> userMissionPage) {
+        List<MissionResDTO.MissionPreview> missionPreviewDTOList = userMissionPage.getContent().stream()
+                .map(MissionConverter::toMissionPreview)
                 .collect(Collectors.toList());
 
-        return MissionResDTO.MissionPreviewListDTO.builder()
+        return MissionResDTO.MissionPreviewList.builder()
                 .isLast(userMissionPage.isLast())
                 .isFirst(userMissionPage.isFirst())
                 .totalPage(userMissionPage.getTotalPages())
@@ -46,12 +46,12 @@ public class MissionConverter {
                 .build();
     }
 
-    public static MissionResDTO.MissionPreviewListDTO toMissionPreviewListDTOFromMission(Page<Mission> missionPage) {
-        List<MissionResDTO.MissionPreviewDTO> missionPreviewDTOList = missionPage.getContent().stream()
-                .map(MissionConverter::toMissionPreviewDTO)
+    public static MissionResDTO.MissionPreviewList toMissionPreviewListFromMission(Page<Mission> missionPage) {
+        List<MissionResDTO.MissionPreview> missionPreviewDTOList = missionPage.getContent().stream()
+                .map(MissionConverter::toMissionPreview)
                 .collect(Collectors.toList());
 
-        return MissionResDTO.MissionPreviewListDTO.builder()
+        return MissionResDTO.MissionPreviewList.builder()
                 .isLast(missionPage.isLast())
                 .isFirst(missionPage.isFirst())
                 .totalPage(missionPage.getTotalPages())

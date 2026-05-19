@@ -1,6 +1,5 @@
 package com.example.umc10th.domain.user.dto;
 
-import com.example.umc10th.domain.mission.dto.MissionResDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +14,7 @@ public class UserResDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class JoinResultDTO {
+    public static class JoinResult {
         private Long userId;
         private LocalDateTime createdAt;
     }
@@ -24,7 +23,7 @@ public class UserResDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class MyPageDTO {
+    public static class MyPage {
         private String name;
         private String email;
         private String phoneNumber;
@@ -35,7 +34,7 @@ public class UserResDTO {
     @Getter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class TermListDTO {
+    public static class TermList {
         private List<TermDTO> terms;
     }
 
@@ -47,6 +46,6 @@ public class UserResDTO {
         private Long termId;
         private String title;
         private String body;
-        private Boolean optional;
+        private Boolean isOptional;
     }
 }

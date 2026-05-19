@@ -17,7 +17,4 @@ public class Reply extends BaseEntity {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
-
-    @OneToOne(mappedBy = "reply", fetch = FetchType.LAZY)
-    private Review review;
 }

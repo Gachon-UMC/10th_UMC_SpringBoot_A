@@ -11,7 +11,7 @@ import java.util.List;
 public class UserReqDTO {
 
     @Getter
-    public static class JoinDTO {
+    public static class Join {
         @NotBlank
         @Size(min = 2, max = 20)
         private String name;

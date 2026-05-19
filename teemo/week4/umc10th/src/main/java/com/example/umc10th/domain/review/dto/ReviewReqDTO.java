@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 public class ReviewReqDTO {
 
     @Getter
-    public static class ReviewCreateDTO {
+    public static class Create {
         @NotNull(message = "작성자 ID는 필수입니다.")
         private Long userId;
 
@@ -20,5 +20,14 @@ public class ReviewReqDTO {
         @DecimalMin(value = "1.0")
         @DecimalMax(value = "5.0")
         private BigDecimal star;
+    }
+
+    @Getter
+    public static class ListRequest {
+        @NotNull
+        private Long userId;
+        private Long cursorId;
+        private BigDecimal cursorStar;
+        private String sortBy; // "id" or "star"
     }
 }
