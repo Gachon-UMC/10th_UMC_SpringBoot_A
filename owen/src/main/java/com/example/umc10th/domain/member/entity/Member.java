@@ -38,7 +38,8 @@ public class Member extends BaseEntity {
     @Column(name = "detail_address")
     private String detailAddress;
 
-    @Column(name = "social_id", nullable = false)
+    // [8주차] 폼 로그인 사용자(socialType=LOCAL)는 socialId 가 빈 문자열일 수 있어 nullable=true 로 완화
+    @Column(name = "social_id")
     private String socialId;
 
     @Enumerated(EnumType.STRING)
@@ -52,6 +53,10 @@ public class Member extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String email;
 
+    // [8주차 추가] BCrypt 해시는 60자. 여유 두어 100자.
+    @Column(nullable = false, length = 100)
+    private String password;
+
     @Column(name = "phone_number", length = 11)
     private String phoneNumber;
 
@@ -60,7 +65,4 @@ public class Member extends BaseEntity {
 
     @Column(name = "profile_url", columnDefinition = "TEXT")
     private String profileUrl;
-
-    // 양방향 매핑 제거 — 필요 시 Repository에서 조회하는 방식으로 처리
-    // memberFoodList, memberTermList, memberMissionList, reviewList 삭제
 }
